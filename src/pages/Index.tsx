@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { MessageCircle, Heart, Shield, Users, Phone, Mail } from 'lucide-react';
 import ChatInterface from '@/components/ChatInterface';
 import ToneSelector from '@/components/ToneSelector';
@@ -62,9 +63,11 @@ const Index = () => {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Heart className="h-6 w-6 text-white" />
-              </div>
+              <img 
+                src="/lovable-uploads/25fe395b-beb5-478e-ad30-c2363a173a8c.png" 
+                alt="Canadian Men's Health Foundation" 
+                className="w-12 h-12 object-contain"
+              />
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Canadian Men's Health Foundation</h1>
                 <p className="text-sm text-gray-600">Mental Health Support</p>
@@ -90,9 +93,12 @@ const Index = () => {
           {/* Liam Introduction Card */}
           <Card className="max-w-2xl mx-auto mb-8 border-2 border-blue-200 bg-white/80 backdrop-blur-sm">
             <CardHeader className="text-center">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <MessageCircle className="h-8 w-8 text-white" />
-              </div>
+              <Avatar className="w-16 h-16 mx-auto mb-4">
+                <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xl font-bold">
+                  L
+                </AvatarFallback>
+              </Avatar>
               <CardTitle className="text-2xl text-blue-900">Meet Liam</CardTitle>
               <CardDescription className="text-lg">
                 Your AI mental health companion, trained to understand and support Canadian men's mental health needs

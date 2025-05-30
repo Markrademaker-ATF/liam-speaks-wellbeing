@@ -1,9 +1,9 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import ToneSelector from './ToneSelector';
@@ -175,9 +175,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
               Back
             </Button>
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center">
-                <MessageCircle className="h-5 w-5 text-white" />
-              </div>
+              <Avatar className="w-10 h-10">
+                <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold">
+                  L
+                </AvatarFallback>
+              </Avatar>
               <div>
                 <h2 className="font-semibold text-gray-900">Liam</h2>
                 <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
@@ -216,9 +219,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
               >
                 {message.sender === 'liam' && (
                   <div className="flex items-center space-x-2 mb-2">
-                    <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center">
-                      <MessageCircle className="h-3 w-3 text-white" />
-                    </div>
+                    <Avatar className="w-6 h-6">
+                      <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xs font-bold">
+                        L
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="text-xs font-medium text-gray-600">Liam</span>
                   </div>
                 )}
@@ -243,9 +249,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
             <div className="flex justify-start">
               <div className="bg-white text-gray-900 shadow-sm border max-w-xs lg:max-w-md px-4 py-3 rounded-lg">
                 <div className="flex items-center space-x-2 mb-2">
-                  <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-green-500 rounded-full flex items-center justify-center">
-                    <MessageCircle className="h-3 w-3 text-white" />
-                  </div>
+                  <Avatar className="w-6 h-6">
+                    <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xs font-bold">
+                      L
+                    </AvatarFallback>
+                  </Avatar>
                   <span className="text-xs font-medium text-gray-600">Liam</span>
                 </div>
                 <div className="flex space-x-1">
