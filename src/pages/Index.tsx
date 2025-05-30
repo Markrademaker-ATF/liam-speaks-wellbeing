@@ -1,12 +1,193 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React, { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MessageCircle, Heart, Shield, Users, Phone, Mail } from 'lucide-react';
+import ChatInterface from '@/components/ChatInterface';
+import ToneSelector from '@/components/ToneSelector';
+import ResourceCard from '@/components/ResourceCard';
 
 const Index = () => {
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+  const [showChat, setShowChat] = useState(false);
+  const [selectedTone, setSelectedTone] = useState('supportive');
+
+  const resources = [
+    {
+      title: "Crisis Support",
+      description: "Immediate help available 24/7",
+      icon: Phone,
+      color: "bg-red-50 border-red-200",
+      action: "Call Now: 1-833-456-4566"
+    },
+    {
+      title: "Counselling Services",
+      description: "Connect with licensed therapists",
+      icon: Users,
+      color: "bg-blue-50 border-blue-200",
+      action: "Book Session"
+    },
+    {
+      title: "Peer Support Groups",
+      description: "Join men's support communities",
+      icon: Heart,
+      color: "bg-green-50 border-green-200",
+      action: "Find Groups"
+    },
+    {
+      title: "Mental Health Resources",
+      description: "Educational materials and tools",
+      icon: Shield,
+      color: "bg-purple-50 border-purple-200",
+      action: "Browse Resources"
+    }
+  ];
+
+  if (showChat) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
+        <ChatInterface 
+          selectedTone={selectedTone}
+          onBack={() => setShowChat(false)}
+          onToneChange={setSelectedTone}
+        />
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                <Heart className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-gray-900">Canadian Men's Health Foundation</h1>
+                <p className="text-sm text-gray-600">Mental Health Support</p>
+              </div>
+            </div>
+            <Badge variant="secondary" className="bg-green-100 text-green-800">
+              Available 24/7
+            </Badge>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="max-w-6xl mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            You're Not Alone in This Journey
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            Meet Liam, your personal mental health companion. Get support, resources, and connect with the right people when you need it most.
+          </p>
+          
+          {/* Liam Introduction Card */}
+          <Card className="max-w-2xl mx-auto mb-8 border-2 border-blue-200 bg-white/80 backdrop-blur-sm">
+            <CardHeader className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-green-500 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <MessageCircle className="h-8 w-8 text-white" />
+              </div>
+              <CardTitle className="text-2xl text-blue-900">Meet Liam</CardTitle>
+              <CardDescription className="text-lg">
+                Your AI mental health companion, trained to understand and support Canadian men's mental health needs
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="text-center p-3 bg-blue-50 rounded-lg">
+                  <span className="font-semibold text-blue-800">Empathetic</span>
+                  <p className="text-blue-600 mt-1">Understanding and compassionate</p>
+                </div>
+                <div className="text-center p-3 bg-green-50 rounded-lg">
+                  <span className="font-semibold text-green-800">Adaptive</span>
+                  <p className="text-green-600 mt-1">Adjusts tone to your needs</p>
+                </div>
+                <div className="text-center p-3 bg-purple-50 rounded-lg">
+                  <span className="font-semibold text-purple-800">Connected</span>
+                  <p className="text-purple-600 mt-1">Links you to real support</p>
+                </div>
+              </div>
+              
+              <ToneSelector selectedTone={selectedTone} onToneChange={setSelectedTone} />
+              
+              <Button 
+                onClick={() => setShowChat(true)}
+                size="lg" 
+                className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
+              >
+                Start Conversation with Liam
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Resources Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {resources.map((resource, index) => (
+            <ResourceCard key={index} {...resource} />
+          ))}
+        </div>
+
+        {/* Crisis Banner */}
+        <Card className="bg-red-50 border-red-200 border-2">
+          <CardContent className="p-6 text-center">
+            <Phone className="h-8 w-8 text-red-600 mx-auto mb-3" />
+            <h3 className="text-xl font-bold text-red-900 mb-2">In Crisis? Get Immediate Help</h3>
+            <p className="text-red-700 mb-4">
+              If you're having thoughts of self-harm or suicide, please reach out immediately.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button variant="destructive" size="lg" className="bg-red-600 hover:bg-red-700">
+                Call Crisis Line: 1-833-456-4566
+              </Button>
+              <Button variant="outline" className="border-red-300 text-red-700 hover:bg-red-50">
+                Chat with Crisis Counselor
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-white border-t mt-16">
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Contact Us</h4>
+              <div className="space-y-2 text-gray-600">
+                <div className="flex items-center space-x-2">
+                  <Phone className="h-4 w-4" />
+                  <span>1-833-456-4566</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Mail className="h-4 w-4" />
+                  <span>support@menshealthfoundation.ca</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">Quick Links</h4>
+              <ul className="space-y-2 text-gray-600">
+                <li><a href="#" className="hover:text-blue-600">Mental Health Resources</a></li>
+                <li><a href="#" className="hover:text-blue-600">Support Groups</a></li>
+                <li><a href="#" className="hover:text-blue-600">Crisis Support</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">About</h4>
+              <p className="text-gray-600 text-sm">
+                Dedicated to improving the mental health and wellbeing of Canadian men through support, resources, and community.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
