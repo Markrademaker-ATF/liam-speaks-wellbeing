@@ -80,6 +80,46 @@ const Index = () => {
         </div>
       </header>
 
+      {/* Banner Section */}
+      <section className="relative bg-gradient-to-r from-slate-800 via-blue-900 to-slate-700 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="relative max-w-6xl mx-auto px-4 py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            <div className="space-y-6">
+              <h2 className="text-5xl lg:text-6xl font-bold leading-tight">
+                STRONGER
+                <br />
+                <span className="text-orange-400">TOGETHER</span>
+              </h2>
+              <p className="text-xl text-gray-200 max-w-md">
+                We provide men and their families with practical tools and expert advice to live healthier.
+              </p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 text-cyan-300">
+                  <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">•</span>
+                  </div>
+                  <h3 className="text-2xl font-bold">NEVER AL<span className="text-orange-400">O</span>NE</h3>
+                </div>
+                <p className="text-gray-200 text-lg">
+                  Join guys talking about the tough stuff and getting tools to build better mental health during Men's Health Month.
+                </p>
+                <Button 
+                  size="lg" 
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200"
+                  onClick={() => setShowChat(true)}
+                >
+                  JOIN THE MOVEMENT
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section className="max-w-6xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
