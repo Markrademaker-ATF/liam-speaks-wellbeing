@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,30 +15,26 @@ const Index = () => {
   const resources = [
     {
       title: "Crisis Support",
-      description: "Immediate help available 24/7",
+      description: "Immediate help available 24/7 for urgent mental health situations",
       icon: Phone,
-      color: "bg-red-50 border-red-200",
       action: "Call Now: 1-833-456-4566"
     },
     {
       title: "Counselling Services",
-      description: "Connect with licensed therapists",
+      description: "Connect with licensed therapists specialized in men's mental health",
       icon: Users,
-      color: "bg-blue-50 border-blue-200",
       action: "Book Session"
     },
     {
       title: "Peer Support Groups",
-      description: "Join men's support communities",
+      description: "Join supportive communities of men sharing similar experiences",
       icon: Heart,
-      color: "bg-green-50 border-green-200",
       action: "Find Groups"
     },
     {
       title: "Mental Health Resources",
-      description: "Educational materials and tools",
+      description: "Access educational materials, tools, and self-help resources",
       icon: Shield,
-      color: "bg-purple-50 border-purple-200",
       action: "Browse Resources"
     }
   ];
@@ -174,7 +169,7 @@ const Index = () => {
         </div>
 
         {/* Resources Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {resources.map((resource, index) => (
             <ResourceCard key={index} {...resource} />
           ))}

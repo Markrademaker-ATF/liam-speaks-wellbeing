@@ -16,21 +16,20 @@ const ResourceCard: React.FC<ResourceCardProps> = ({
   title, 
   description, 
   icon: Icon, 
-  color, 
   action 
 }) => {
   return (
-    <Card className={`${color} border-2 hover:shadow-md transition-all duration-200 hover:scale-105`}>
-      <CardContent className="p-6 text-center">
-        <div className="w-12 h-12 mx-auto mb-4 bg-white rounded-full flex items-center justify-center shadow-sm">
-          <Icon className="h-6 w-6 text-gray-700" />
+    <Card className="bg-white border-2 border-blue-100 hover:border-blue-300 hover:shadow-lg transition-all duration-300 hover:scale-105 group">
+      <CardContent className="p-8 text-center">
+        <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow duration-300">
+          <Icon className="h-8 w-8 text-white" />
         </div>
-        <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-        <p className="text-sm text-gray-700 mb-4">{description}</p>
+        <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+        <p className="text-gray-600 mb-6 leading-relaxed">{description}</p>
         <Button 
           variant="outline" 
-          size="sm" 
-          className="w-full border-gray-300 hover:bg-white"
+          size="lg"
+          className="w-full border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 font-semibold transition-all duration-200"
         >
           {action}
         </Button>
