@@ -94,7 +94,7 @@ const Index = () => {
           <Card className="max-w-2xl mx-auto mb-8 border-2 border-blue-200 bg-white/80 backdrop-blur-sm">
             <CardHeader className="text-center">
               <Avatar className="w-16 h-16 mx-auto mb-4">
-                <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
                 <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xl font-bold">
                   L
                 </AvatarFallback>

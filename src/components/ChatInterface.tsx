@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -176,7 +177,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
             </Button>
             <div className="flex items-center space-x-3">
               <Avatar className="w-10 h-10">
-                <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
                 <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold">
                   L
                 </AvatarFallback>
@@ -220,7 +221,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
                 {message.sender === 'liam' && (
                   <div className="flex items-center space-x-2 mb-2">
                     <Avatar className="w-6 h-6">
-                      <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                      <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
                       <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xs font-bold">
                         L
                       </AvatarFallback>
@@ -250,7 +251,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
               <div className="bg-white text-gray-900 shadow-sm border max-w-xs lg:max-w-md px-4 py-3 rounded-lg">
                 <div className="flex items-center space-x-2 mb-2">
                   <Avatar className="w-6 h-6">
-                    <AvatarImage src="/lovable-uploads/photo-1581092795360-fd1ca04f0952" alt="Liam" />
+                    <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
                     <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xs font-bold">
                       L
                     </AvatarFallback>
