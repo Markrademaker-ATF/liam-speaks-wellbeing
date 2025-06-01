@@ -109,11 +109,6 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* Separator */}
-      <div className="relative z-10 px-6 py-8">
-        <Separator className="bg-white/20" />
-      </div>
-
       {/* Statistics Section */}
       <div className="relative z-10 py-16 px-6">
         <div className="max-w-7xl mx-auto">
