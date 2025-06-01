@@ -52,28 +52,19 @@ const Landing = () => {
 
       {/* Main content - Split layout */}
       <div className="relative z-10 flex flex-col lg:flex-row min-h-[calc(100vh-120px)]">
-        {/* Left side - Liam's large image - moved more to the right */}
-        <div className="flex-1 flex items-end justify-center lg:justify-end relative lg:pr-8">
-          <div className="relative w-full h-full flex items-end justify-center lg:justify-end">
+        {/* Left side - Liam's large image - moved even further to the right */}
+        <div className="flex-1 flex items-end justify-center lg:justify-end relative lg:pr-0">
+          <div className="relative w-full h-full flex items-end justify-center lg:justify-end lg:translate-x-24">
             {/* Glow effect behind Liam */}
-            <div className="absolute bottom-0 left-1/2 lg:left-3/4 transform -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-1/2 lg:left-4/5 transform -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
             
-            {/* Liam's image - positioned more to the right */}
+            {/* Liam's image - positioned much further to the right */}
             <img 
               src="/lovable-uploads/026d27c2-2cca-4ae6-811e-3fdd1dbc7ce7.png" 
               alt="Liam - Your AI Mental Health Companion" 
               className="relative w-full max-w-2xl lg:max-w-4xl h-auto object-contain drop-shadow-2xl"
               style={{ marginBottom: '0' }}
             />
-            
-            {/* Speech bubble - repositioned to follow Liam's new position */}
-            <div className="absolute top-8 left-4 lg:top-12 lg:left-8 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl max-w-sm border border-white/20">
-              <p className="text-gray-800 font-medium text-base lg:text-lg">
-                Ready to talk about what's on your mind? I'm here to listen and support you.
-              </p>
-              {/* Speech bubble tail */}
-              <div className="absolute bottom-[-8px] right-8 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white/95"></div>
-            </div>
           </div>
         </div>
 
