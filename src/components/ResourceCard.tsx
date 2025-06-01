@@ -8,7 +8,6 @@ interface ResourceCardProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  color: string;
   action: string;
 }
 

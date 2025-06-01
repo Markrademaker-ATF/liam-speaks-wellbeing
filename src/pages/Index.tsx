@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -126,7 +125,7 @@ const Index = () => {
                   
                   <DropdownMenuItem asChild>
                     <a 
-                      href="https://menshealthfoundation.ca/never-alone-june-2025/" 
+                      href="https://menshealthfoundation.ca/canadian-mens-health-month/" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="cursor-pointer"
