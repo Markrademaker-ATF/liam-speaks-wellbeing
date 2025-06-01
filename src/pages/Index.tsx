@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -75,7 +74,9 @@ const Index = () => {
 
   const suggestToneBasedOnInputs = (age: string, reason: string) => {
     // Age-based suggestions
-    if (age === '18-25') {
+    if (age === 'under-18') {
+      return 'youthful'; // Always use youthful for under 18
+    } else if (age === '18-25') {
       if (reason === 'anxiety' || reason === 'stress') return 'youthful';
       if (reason === 'depression') return 'supportive';
       return 'casual';
@@ -375,6 +376,7 @@ const Index = () => {
                           <SelectValue placeholder="Select your age range" />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="under-18">Younger than 18</SelectItem>
                           <SelectItem value="18-25">18-25 years old</SelectItem>
                           <SelectItem value="26-35">26-35 years old</SelectItem>
                           <SelectItem value="36-50">36-50 years old</SelectItem>
