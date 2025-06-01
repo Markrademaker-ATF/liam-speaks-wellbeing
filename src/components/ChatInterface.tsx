@@ -4,9 +4,27 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles } from 'lucide-react';
+import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import ToneSelector from './ToneSelector';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
+interface ResourcePlan {
+  summary: string;
+  keyAdvice: string[];
+  recommendedLinks: Array<{
+    title: string;
+    url: string;
+    description: string;
+  }>;
+  nextSteps: string[];
+}
+
+interface SuggestedAction {
+  label: string;
+  url: string;
+  type: 'assessment' | 'support' | 'group';
+}
 
 interface Message {
   id: string;
@@ -14,11 +32,8 @@ interface Message {
   sender: 'user' | 'liam';
   timestamp: Date;
   tone?: string;
-  suggestedActions?: Array<{
-    label: string;
-    url: string;
-    type: 'assessment' | 'support' | 'group';
-  }>;
+  suggestedActions?: SuggestedAction[];
+  resourcePlan?: ResourcePlan;
 }
 
 interface ChatInterfaceProps {
@@ -26,6 +41,237 @@ interface ChatInterfaceProps {
   onBack: () => void;
   onToneChange: (tone: string) => void;
 }
+
+interface ChatHeaderProps {
+  selectedTone: string;
+  onBack: () => void;
+  onToneChange: (tone: string) => void;
+}
+
+const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneChange }) => {
+  return (
+    <div className="bg-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50 sticky top-0 z-50">
+      <div className="max-w-5xl mx-auto px-6 py-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={onBack}
+              className="hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 rounded-xl"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <div className="flex items-center space-x-4 bg-gradient-to-r from-blue-50 to-green-50 px-4 py-2 rounded-2xl border border-blue-100/50">
+              <div className="relative">
+                <Avatar className="w-12 h-12 ring-2 ring-blue-200/50 ring-offset-2 ring-offset-white">
+                  <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold text-lg">
+                    L
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
+                  <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5 animate-pulse"></div>
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center space-x-2">
+                  <h2 className="font-bold text-lg text-gray-900">Liam</h2>
+                  <Sparkles className="w-4 h-4 text-blue-500" />
+                </div>
+                <Badge variant="secondary" className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200 font-medium">
+                  {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Mode • Online
+                </Badge>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
+            <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+interface ResourcePlanProps {
+  resourcePlan: ResourcePlan;
+  messageId: string;
+  expanded: boolean;
+  toggleExpanded: (id: string) => void;
+}
+
+const ResourcePlanComponent: React.FC<ResourcePlanProps> = ({ resourcePlan, messageId, expanded, toggleExpanded }) => {
+  return (
+    <div className="mt-4 pt-4 border-t border-gray-100">
+      <Collapsible open={expanded} onOpenChange={() => toggleExpanded(messageId)}>
+        <CollapsibleTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full justify-between text-xs font-semibold bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-indigo-100 hover:border-purple-300 transition-all duration-300"
+          >
+            <div className="flex items-center">
+              <FileText className="w-3 h-3 mr-2" />
+              View Personalized Resource Plan
+            </div>
+            {expanded ? 
+              <ChevronUp className="w-3 h-3" /> : 
+              <ChevronDown className="w-3 h-3" />
+            }
+          </Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="mt-3">
+          <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-bold text-purple-900 flex items-center">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Your Personalized Resource Plan
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-xs">
+              <div>
+                <h4 className="font-semibold text-purple-800 mb-2">Summary</h4>
+                <p className="text-purple-700">{resourcePlan.summary}</p>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold text-purple-800 mb-2">Key Advice</h4>
+                <ul className="space-y-1">
+                  {resourcePlan.keyAdvice.map((advice, idx) => (
+                    <li key={idx} className="flex items-start text-purple-700">
+                      <span className="text-purple-500 mr-2">•</span>
+                      {advice}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-purple-800 mb-2">Recommended Resources</h4>
+                <div className="space-y-2">
+                  {resourcePlan.recommendedLinks.map((link, idx) => (
+                    <div key={idx} className="bg-white/70 rounded-lg p-2 border border-purple-200">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="p-0 h-auto text-left w-full justify-start hover:bg-transparent"
+                        onClick={() => window.open(link.url, '_blank')}
+                      >
+                        <div>
+                          <div className="font-medium text-purple-800 flex items-center">
+                            <ExternalLink className="w-3 h-3 mr-1" />
+                            {link.title}
+                          </div>
+                          <div className="text-purple-600 text-xs mt-1">{link.description}</div>
+                        </div>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-purple-800 mb-2">Next Steps</h4>
+                <ol className="space-y-1">
+                  {resourcePlan.nextSteps.map((step, idx) => (
+                    <li key={idx} className="flex items-start text-purple-700">
+                      <span className="text-purple-500 mr-2 font-medium">{idx + 1}.</span>
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </CardContent>
+          </Card>
+        </CollapsibleContent>
+      </Collapsible>
+    </div>
+  );
+};
+
+interface MessageCardProps {
+  message: Message;
+  expandedPlans: Set<string>;
+  toggleResourcePlan: (id: string) => void;
+}
+
+const MessageCard: React.FC<MessageCardProps> = ({ message, expandedPlans, toggleResourcePlan }) => {
+  return (
+    <div
+      className={`max-w-md lg:max-w-lg group ${
+        message.sender === 'user'
+          ? 'order-2'
+          : 'order-1'
+      }`}
+    >
+      {message.sender === 'liam' && (
+        <div className="flex items-center space-x-3 mb-3">
+          <Avatar className="w-8 h-8 ring-2 ring-blue-100 ring-offset-1 ring-offset-blue-50">
+            <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
+            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-sm font-bold">
+              L
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <span className="text-sm font-semibold text-gray-700">Liam</span>
+            <span className="text-xs text-gray-500 ml-2">AI Mental Health Companion</span>
+          </div>
+        </div>
+      )}
+      
+      <Card className={`transition-all duration-300 hover:shadow-md group-hover:scale-[1.02] ${
+        message.sender === 'user'
+          ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-blue-100'
+          : 'bg-white/90 backdrop-blur-sm text-gray-900 shadow-sm border-gray-200/50 hover:bg-white'
+      }`}>
+        <CardContent className="p-4">
+          <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+          
+          {message.sender === 'liam' && message.suggestedActions && (
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <p className="text-xs font-semibold text-gray-600 mb-3 flex items-center">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Suggested Next Steps
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {message.suggestedActions.map((action, actionIndex) => (
+                  <Button
+                    key={actionIndex}
+                    size="sm"
+                    variant={action.type === 'assessment' ? "default" : "outline"}
+                    className={`text-xs transition-all duration-300 hover:scale-105 ${
+                      action.type === 'assessment' 
+                        ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-orange-200' 
+                        : 'border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300'
+                    }`}
+                    onClick={() => window.open(action.url, '_blank')}
+                  >
+                    {action.type === 'assessment' && <ExternalLink className="h-3 w-3 mr-1" />}
+                    {action.type === 'support' && <Phone className="h-3 w-3 mr-1" />}
+                    {action.type === 'group' && <Users className="h-3 w-3 mr-1" />}
+                    {action.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {message.sender === 'liam' && message.resourcePlan && (
+            <ResourcePlanComponent
+              resourcePlan={message.resourcePlan}
+              messageId={message.id}
+              expanded={expandedPlans.has(message.id)}
+              toggleExpanded={toggleResourcePlan}
+            />
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onToneChange }) => {
   const [messages, setMessages] = useState<Message[]>([
@@ -39,6 +285,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -110,14 +357,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
     );
   };
 
-  const getSuggestedActions = (userMessage: string): Array<{label: string; url: string; type: 'assessment' | 'support' | 'group'}> => {
-    const actions = [];
+  const getSuggestedActions = (userMessage: string): SuggestedAction[] => {
+    const actions: SuggestedAction[] = [];
     
     if (detectAnxietyKeywords(userMessage)) {
       actions.push({
         label: "Take Anxiety Assessment",
         url: "https://menshealthfoundation.ca/mindfit-toolkit/anxiety-assessment/",
-        type: 'assessment' as const
+        type: 'assessment'
       });
     }
     
@@ -125,18 +372,177 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       actions.push({
         label: "Take Depression Assessment",
         url: "https://menshealthfoundation.ca/mindfit-toolkit/depression-assessment/",
-        type: 'assessment' as const
+        type: 'assessment'
       });
     }
 
-    // Always include general support options
     actions.push({
       label: "Get Professional Support",
       url: "tel:1-833-456-4566",
-      type: 'support' as const
+      type: 'support'
     });
 
     return actions;
+  };
+
+  const generateResourcePlan = (userMessage: string, tone: string): ResourcePlan => {
+    const hasAnxiety = detectAnxietyKeywords(userMessage);
+    const hasDepression = detectDepressionKeywords(userMessage);
+    const isCrisis = detectCrisisKeywords(userMessage);
+
+    if (isCrisis) {
+      return {
+        summary: "Immediate crisis support and safety planning are the top priorities right now.",
+        keyAdvice: [
+          "Your safety is the most important thing",
+          "Reach out to crisis counselors immediately",
+          "You don't have to face this alone",
+          "There are people trained to help you through this moment"
+        ],
+        recommendedLinks: [
+          {
+            title: "24/7 Crisis Support Line",
+            url: "tel:1-833-456-4566",
+            description: "Immediate phone support available around the clock"
+          },
+          {
+            title: "Crisis Text Line",
+            url: "https://www.crisistextline.org/",
+            description: "Text-based crisis support when you can't talk"
+          }
+        ],
+        nextSteps: [
+          "Call the crisis support line now",
+          "Stay with someone you trust",
+          "Remove any immediate means of harm",
+          "Follow up with a mental health professional"
+        ]
+      };
+    }
+
+    let summary = "Based on our conversation, here's a personalized plan to support your mental health journey.";
+    let keyAdvice: string[] = [];
+    let recommendedLinks: Array<{title: string; url: string; description: string}> = [];
+    let nextSteps: string[] = [];
+
+    if (hasAnxiety && hasDepression) {
+      summary = "You're dealing with both anxiety and depression symptoms. This comprehensive plan addresses both areas with proven strategies.";
+      keyAdvice = [
+        "Acknowledge that these feelings are valid and treatable",
+        "Consider professional assessment for both conditions",
+        "Practice daily stress management techniques",
+        "Connect with others who understand your experience"
+      ];
+      recommendedLinks = [
+        {
+          title: "Anxiety Assessment Tool",
+          url: "https://menshealthfoundation.ca/mindfit-toolkit/anxiety-assessment/",
+          description: "Professional screening to understand your anxiety levels"
+        },
+        {
+          title: "Depression Assessment Tool",
+          url: "https://menshealthfoundation.ca/mindfit-toolkit/depression-assessment/",
+          description: "Comprehensive screening for depression symptoms"
+        },
+        {
+          title: "Mental Health Resources",
+          url: "https://menshealthfoundation.ca/mental-health/",
+          description: "Comprehensive mental health support and information"
+        }
+      ];
+      nextSteps = [
+        "Complete both assessment tools",
+        "Schedule an appointment with a mental health professional",
+        "Start a daily mood tracking routine",
+        "Explore local support groups"
+      ];
+    } else if (hasAnxiety) {
+      summary = "Your anxiety symptoms are recognized and there are effective ways to manage them.";
+      keyAdvice = [
+        "Anxiety is treatable with the right strategies",
+        "Understanding your triggers is key to management",
+        "Regular practice of coping techniques builds resilience",
+        "Professional support can accelerate your progress"
+      ];
+      recommendedLinks = [
+        {
+          title: "Anxiety Assessment Tool",
+          url: "https://menshealthfoundation.ca/mindfit-toolkit/anxiety-assessment/",
+          description: "Professional screening to understand your anxiety levels"
+        },
+        {
+          title: "Anxiety Management Techniques",
+          url: "https://menshealthfoundation.ca/mental-health/anxiety/",
+          description: "Practical strategies for managing anxiety"
+        }
+      ];
+      nextSteps = [
+        "Take the anxiety assessment",
+        "Practice deep breathing exercises daily",
+        "Identify and track your anxiety triggers",
+        "Consider speaking with a counselor"
+      ];
+    } else if (hasDepression) {
+      summary = "Depression is a common but treatable condition. This plan focuses on evidence-based approaches to help you feel better.";
+      keyAdvice = [
+        "Depression is a medical condition, not a personal weakness",
+        "Small, consistent steps lead to meaningful change",
+        "Professional support can make a significant difference",
+        "Recovery is possible with the right tools and support"
+      ];
+      recommendedLinks = [
+        {
+          title: "Depression Assessment Tool",
+          url: "https://menshealthfoundation.ca/mindfit-toolkit/depression-assessment/",
+          description: "Comprehensive screening for depression symptoms"
+        },
+        {
+          title: "Depression Support Resources",
+          url: "https://menshealthfoundation.ca/mental-health/depression/",
+          description: "Information and support for managing depression"
+        }
+      ];
+      nextSteps = [
+        "Complete the depression assessment",
+        "Establish a daily routine with small, achievable goals",
+        "Connect with supportive people in your life",
+        "Explore professional counseling options"
+      ];
+    } else {
+      keyAdvice = [
+        "Taking care of your mental health is a sign of strength",
+        "Regular check-ins with yourself are important",
+        "Building a support network enhances resilience",
+        "Professional guidance can help even when things seem okay"
+      ];
+      recommendedLinks = [
+        {
+          title: "Men's Mental Health Resources",
+          url: "https://menshealthfoundation.ca/mental-health/",
+          description: "Comprehensive mental health information and support"
+        },
+        {
+          title: "Professional Support Directory",
+          url: "https://menshealthfoundation.ca/find-help/",
+          description: "Find qualified mental health professionals"
+        }
+      ];
+      nextSteps = [
+        "Continue regular mental health check-ins",
+        "Build and maintain supportive relationships",
+        "Practice stress management techniques",
+        "Stay informed about mental health resources"
+      ];
+    }
+
+    // Always include crisis support
+    recommendedLinks.push({
+      title: "24/7 Crisis Support",
+      url: "tel:1-833-456-4566",
+      description: "Immediate support available anytime you need it"
+    });
+
+    return { summary, keyAdvice, recommendedLinks, nextSteps };
   };
 
   const generateLiamResponse = (userMessage: string, tone: string): string => {
@@ -159,7 +565,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       baseResponse = "What you're describing sounds like it could be related to depression. Those feelings are valid and more common than you might think, especially among men who often don't talk about these experiences.";
     }
 
-    // Add tone-specific additions for anxiety/depression
     if (hasAnxiety || hasDepression) {
       const toneAdditions = {
         supportive: " I want you to know that reaching out shows real strength, and I'm here to help you find the right resources.",
@@ -172,7 +577,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       return baseResponse;
     }
 
-    // If no specific keywords detected, return general supportive response
     const responses = {
       supportive: [
         "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
@@ -205,6 +609,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
     return toneResponses[Math.floor(Math.random() * toneResponses.length)];
   };
 
+  const toggleResourcePlan = (messageId: string) => {
+    setExpandedPlans(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(messageId)) {
+        newSet.delete(messageId);
+      } else {
+        newSet.add(messageId);
+      }
+      return newSet;
+    });
+  };
+
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
 
@@ -219,7 +635,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
     setInputValue('');
     setIsTyping(true);
 
-    // Check for crisis keywords
     if (detectCrisisKeywords(inputValue)) {
       toast({
         title: "Crisis Support Available",
@@ -228,9 +643,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       });
     }
 
-    // Simulate Liam's response
     setTimeout(() => {
       const suggestedActions = getSuggestedActions(inputValue);
+      const resourcePlan = generateResourcePlan(inputValue, selectedTone);
       
       const liamResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -238,7 +653,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
         sender: 'liam',
         timestamp: new Date(),
         tone: selectedTone,
-        suggestedActions: suggestedActions
+        suggestedActions: suggestedActions,
+        resourcePlan: resourcePlan
       };
       setMessages(prev => [...prev, liamResponse]);
       setIsTyping(false);
@@ -254,52 +670,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30">
-      {/* Enhanced Header */}
-      <div className="bg-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50 sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-6 py-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={onBack}
-                className="hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 rounded-xl"
-              >
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back
-              </Button>
-              <div className="flex items-center space-x-4 bg-gradient-to-r from-blue-50 to-green-50 px-4 py-2 rounded-2xl border border-blue-100/50">
-                <div className="relative">
-                  <Avatar className="w-12 h-12 ring-2 ring-blue-200/50 ring-offset-2 ring-offset-white">
-                    <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold text-lg">
-                      L
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
-                    <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5 animate-pulse"></div>
-                  </div>
-                </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <h2 className="font-bold text-lg text-gray-900">Liam</h2>
-                    <Sparkles className="w-4 h-4 text-blue-500" />
-                  </div>
-                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200 font-medium">
-                    {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Mode • Online
-                  </Badge>
-                </div>
-              </div>
-            </div>
-            
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
-              <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
-            </div>
-          </div>
-        </div>
-      </div>
+      <ChatHeader selectedTone={selectedTone} onBack={onBack} onToneChange={onToneChange} />
 
-      {/* Enhanced Crisis Banner */}
       <div className="bg-gradient-to-r from-red-50 via-pink-50 to-red-50 border-b border-red-200/50 p-4 shadow-sm">
         <div className="max-w-5xl mx-auto flex items-center justify-center space-x-3 text-red-800">
           <div className="w-8 h-8 bg-red-500/10 rounded-full flex items-center justify-center">
@@ -318,7 +690,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
         </div>
       </div>
 
-      {/* Enhanced Messages Area */}
       <div className="flex-1 overflow-y-auto p-6 space-y-1">
         <div className="max-w-4xl mx-auto space-y-6">
           {messages.map((message, index) => (
@@ -327,67 +698,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <div
-                className={`max-w-md lg:max-w-lg group ${
-                  message.sender === 'user'
-                    ? 'order-2'
-                    : 'order-1'
-                }`}
-              >
-                {message.sender === 'liam' && (
-                  <div className="flex items-center space-x-3 mb-3">
-                    <Avatar className="w-8 h-8 ring-2 ring-blue-100 ring-offset-1 ring-offset-blue-50">
-                      <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-sm font-bold">
-                        L
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <span className="text-sm font-semibold text-gray-700">Liam</span>
-                      <span className="text-xs text-gray-500 ml-2">AI Mental Health Companion</span>
-                    </div>
-                  </div>
-                )}
-                
-                <Card className={`transition-all duration-300 hover:shadow-md group-hover:scale-[1.02] ${
-                  message.sender === 'user'
-                    ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-blue-100'
-                    : 'bg-white/90 backdrop-blur-sm text-gray-900 shadow-sm border-gray-200/50 hover:bg-white'
-                }`}>
-                  <CardContent className="p-4">
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                    
-                    {message.sender === 'liam' && message.suggestedActions && (
-                      <div className="mt-4 pt-4 border-t border-gray-100">
-                        <p className="text-xs font-semibold text-gray-600 mb-3 flex items-center">
-                          <Sparkles className="w-3 h-3 mr-1" />
-                          Suggested Next Steps
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {message.suggestedActions.map((action, actionIndex) => (
-                            <Button
-                              key={actionIndex}
-                              size="sm"
-                              variant={action.type === 'assessment' ? "default" : "outline"}
-                              className={`text-xs transition-all duration-300 hover:scale-105 ${
-                                action.type === 'assessment' 
-                                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-orange-200' 
-                                  : 'border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300'
-                              }`}
-                              onClick={() => window.open(action.url, '_blank')}
-                            >
-                              {action.type === 'assessment' && <ExternalLink className="h-3 w-3 mr-1" />}
-                              {action.type === 'support' && <Phone className="h-3 w-3 mr-1" />}
-                              {action.type === 'group' && <Users className="h-3 w-3 mr-1" />}
-                              {action.label}
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
+              <MessageCard message={message} expandedPlans={expandedPlans} toggleResourcePlan={toggleResourcePlan} />
             </div>
           ))}
           
@@ -416,7 +727,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
         </div>
       </div>
 
-      {/* Enhanced Input Area */}
       <div className="bg-white/95 backdrop-blur-xl border-t border-gray-200/50 p-6 shadow-lg">
         <div className="max-w-4xl mx-auto">
           <div className="flex space-x-4 items-end">
