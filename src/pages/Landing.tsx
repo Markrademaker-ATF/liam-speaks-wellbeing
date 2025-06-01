@@ -8,13 +8,13 @@ const Landing = () => {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate('/');
+    navigate('/chat');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 relative overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-transparent"></div>
       <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
       <div className="absolute bottom-40 right-20 w-24 h-24 bg-white/10 rounded-full blur-lg"></div>
       
@@ -56,14 +56,14 @@ const Landing = () => {
             
             {/* Liam's avatar with glow effect */}
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-green-400 rounded-full blur-xl opacity-50 scale-110"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full blur-xl opacity-50 scale-110"></div>
               <Avatar className="relative w-64 h-64 border-4 border-white/30 shadow-2xl">
                 <AvatarImage 
-                  src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" 
+                  src="/lovable-uploads/43d6626d-43e6-4819-b569-29400860e958.png" 
                   alt="Liam - Your AI Mental Health Companion" 
                   className="object-cover"
                 />
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-6xl font-bold">
+                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-cyan-500 text-white text-6xl font-bold">
                   L
                 </AvatarFallback>
               </Avatar>
@@ -81,7 +81,7 @@ const Landing = () => {
           <h1 className="text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
             The AI companion
             <br />
-            <span className="text-yellow-300">who cares</span>
+            <span className="text-cyan-300">who cares</span>
           </h1>
           
           <p className="text-xl text-white/90 mb-8 leading-relaxed">
@@ -94,7 +94,7 @@ const Landing = () => {
             <Button 
               onClick={handleGetStarted}
               size="lg"
-              className="w-full lg:w-auto bg-white text-purple-600 hover:bg-gray-100 font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
+              className="w-full lg:w-auto bg-white text-blue-700 hover:bg-gray-100 font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl"
             >
               Start Talking with Liam
             </Button>
@@ -107,7 +107,7 @@ const Landing = () => {
       </div>
 
       {/* Bottom decorative gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-purple-800/30 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-900/30 to-transparent"></div>
     </div>
   );
 };
