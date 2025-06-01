@@ -66,11 +66,11 @@ const Landing = () => {
             {/* Glow effect behind Liam */}
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
             
-            {/* Liam's image - made significantly larger */}
+            {/* Liam's image - increased by 1.2x scale */}
             <img 
               src="/lovable-uploads/026d27c2-2cca-4ae6-811e-3fdd1dbc7ce7.png" 
               alt="Liam - Your AI Mental Health Companion" 
-              className="relative w-full max-w-4xl lg:max-w-6xl h-auto object-contain drop-shadow-2xl lg:translate-x-20"
+              className="relative w-full max-w-4xl lg:max-w-6xl h-auto object-contain drop-shadow-2xl lg:translate-x-20 scale-[1.2]"
               style={{ marginBottom: '0' }}
             />
           </div>
