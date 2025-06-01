@@ -1,11 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import ToneSelector from './ToneSelector';
 
@@ -15,6 +14,11 @@ interface Message {
   sender: 'user' | 'liam';
   timestamp: Date;
   tone?: string;
+  suggestedActions?: Array<{
+    label: string;
+    url: string;
+    type: 'assessment' | 'support' | 'group';
+  }>;
 }
 
 interface ChatInterfaceProps {
@@ -70,6 +74,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
     return welcomeMessages[tone as keyof typeof welcomeMessages] || welcomeMessages.supportive;
   }
 
+  const detectAnxietyKeywords = (message: string): boolean => {
+    const anxietyKeywords = [
+      'anxious', 'anxiety', 'worried', 'worrying', 'panic', 'nervous',
+      'restless', 'overwhelmed', 'stressed', 'stress', 'tension',
+      'fear', 'afraid', 'scared', 'racing thoughts', 'can\'t relax',
+      'irritable', 'trouble sleeping', 'difficulty concentrating'
+    ];
+    return anxietyKeywords.some(keyword => 
+      message.toLowerCase().includes(keyword.toLowerCase())
+    );
+  };
+
+  const detectDepressionKeywords = (message: string): boolean => {
+    const depressionKeywords = [
+      'depressed', 'depression', 'sad', 'sadness', 'hopeless', 'worthless',
+      'empty', 'numb', 'tired', 'exhausted', 'no energy', 'low energy',
+      'lost interest', 'don\'t enjoy', 'no motivation', 'can\'t sleep',
+      'sleeping too much', 'appetite', 'weight', 'guilty', 'shame',
+      'trouble making decisions', 'can\'t remember', 'isolated', 'alone'
+    ];
+    return depressionKeywords.some(keyword => 
+      message.toLowerCase().includes(keyword.toLowerCase())
+    );
+  };
+
   const detectCrisisKeywords = (message: string): boolean => {
     const crisisKeywords = [
       'suicide', 'kill myself', 'end it all', 'want to die', 'hurt myself',
@@ -81,6 +110,35 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
     );
   };
 
+  const getSuggestedActions = (userMessage: string): Array<{label: string; url: string; type: 'assessment' | 'support' | 'group'}> => {
+    const actions = [];
+    
+    if (detectAnxietyKeywords(userMessage)) {
+      actions.push({
+        label: "Take Anxiety Assessment",
+        url: "https://menshealthfoundation.ca/mindfit-toolkit/anxiety-assessment/",
+        type: 'assessment' as const
+      });
+    }
+    
+    if (detectDepressionKeywords(userMessage)) {
+      actions.push({
+        label: "Take Depression Assessment",
+        url: "https://menshealthfoundation.ca/mindfit-toolkit/depression-assessment/",
+        type: 'assessment' as const
+      });
+    }
+
+    // Always include general support options
+    actions.push({
+      label: "Get Professional Support",
+      url: "tel:1-833-456-4566",
+      type: 'support' as const
+    });
+
+    return actions;
+  };
+
   const generateLiamResponse = (userMessage: string, tone: string): string => {
     const isCrisis = detectCrisisKeywords(userMessage);
     
@@ -88,37 +146,95 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       return "I'm really concerned about what you're sharing with me. Your safety is the most important thing right now. Please consider reaching out to a crisis counselor immediately at 1-833-456-4566. They're available 24/7 and can provide immediate support. You don't have to go through this alone - there are people who want to help you right now.";
     }
 
-    // Simulate different response styles based on tone
-    const responses = {
-      supportive: [
-        "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
-        "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
-        "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
-      ],
-      professional: [
-        "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
-        "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
-        "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
-      ],
-      casual: [
-        "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
-        "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
-        "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
-      ],
-      youthful: [
-        "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
-        "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
-        "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
-      ],
-      mature: [
-        "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
-        "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
-        "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
-      ]
+    const hasAnxiety = detectAnxietyKeywords(userMessage);
+    const hasDepression = detectDepressionKeywords(userMessage);
+
+    let baseResponse = "";
+    
+    if (hasAnxiety && hasDepression) {
+      baseResponse = "I hear that you're dealing with both anxiety and depression symptoms. That can feel really overwhelming, but please know that these are common experiences and there are effective ways to address them.";
+    } else if (hasAnxiety) {
+      baseResponse = "It sounds like you're experiencing some anxiety symptoms. Those feelings can be really challenging to deal with, but there are proven strategies and assessments that can help you understand what you're going through.";
+    } else if (hasDepression) {
+      baseResponse = "What you're describing sounds like it could be related to depression. Those feelings are valid and more common than you might think, especially among men who often don't talk about these experiences.";
+    } else {
+      const responses = {
+        supportive: [
+          "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
+          "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
+          "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
+        ],
+        professional: [
+          "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
+          "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
+          "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
+        ],
+        casual: [
+          "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
+          "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
+          "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
+        ],
+        youthful: [
+          "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
+          "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
+          "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
+        ],
+        mature: [
+          "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
+          "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
+          "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
+        ]
+      };
+  
+      const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
+      return toneResponses[Math.floor(Math.random() * toneResponses.length)];
+    }
+
+    // Add tone-specific additions
+    const toneAdditions = {
+      supportive: " I want you to know that reaching out shows real strength, and I'm here to help you find the right resources.",
+      professional: " I recommend taking a proper assessment to better understand your symptoms and connect with appropriate professional support.",
+      casual: " The good news is there are some solid tools and people who can help you work through this stuff.",
+      youthful: " There are some really helpful assessments that can give you insight into what you're experiencing and point you toward the right support.",
+      mature: " I encourage you to consider a proper assessment, which can provide valuable insight and help guide you toward the most appropriate support."
     };
 
-    const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
-    return toneResponses[Math.floor(Math.random() * toneResponses.length)];
+    if (hasAnxiety || hasDepression) {
+      baseResponse += toneAdditions[tone as keyof typeof toneAdditions] || toneAdditions.supportive;
+    }
+
+    return baseResponse || (
+      const responses = {
+        supportive: [
+          "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
+          "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
+          "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
+        ],
+        professional: [
+          "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
+          "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
+          "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
+        ],
+        casual: [
+          "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
+          "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
+          "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
+        ],
+        youthful: [
+          "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
+          "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
+          "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
+        ],
+        mature: [
+          "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
+          "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
+          "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
+        ]
+      };
+  
+      const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
+      return toneResponses[Math.floor(Math.random() * toneResponses.length)];
+    );
   };
 
   const handleSendMessage = () => {
@@ -146,12 +262,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
 
     // Simulate Liam's response
     setTimeout(() => {
+      const suggestedActions = getSuggestedActions(inputValue);
+      
       const liamResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: generateLiamResponse(inputValue, selectedTone),
         sender: 'liam',
         timestamp: new Date(),
-        tone: selectedTone
+        tone: selectedTone,
+        suggestedActions: suggestedActions
       };
       setMessages(prev => [...prev, liamResponse]);
       setIsTyping(false);
@@ -230,16 +349,29 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
                   </div>
                 )}
                 <p className="text-sm">{message.content}</p>
-                {message.sender === 'liam' && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 flex space-x-2">
-                    <Button size="sm" variant="outline" className="text-xs">
-                      <Phone className="h-3 w-3 mr-1" />
-                      Get Support
-                    </Button>
-                    <Button size="sm" variant="outline" className="text-xs">
-                      <Users className="h-3 w-3 mr-1" />
-                      Find Groups
-                    </Button>
+                {message.sender === 'liam' && message.suggestedActions && (
+                  <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
+                    <p className="text-xs font-medium text-gray-600 mb-2">Suggested next steps:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {message.suggestedActions.map((action, index) => (
+                        <Button
+                          key={index}
+                          size="sm"
+                          variant={action.type === 'assessment' ? "default" : "outline"}
+                          className={`text-xs ${
+                            action.type === 'assessment' 
+                              ? 'bg-orange-500 hover:bg-orange-600 text-white' 
+                              : 'border-blue-200 text-blue-700 hover:bg-blue-50'
+                          }`}
+                          onClick={() => window.open(action.url, '_blank')}
+                        >
+                          {action.type === 'assessment' && <ExternalLink className="h-3 w-3 mr-1" />}
+                          {action.type === 'support' && <Phone className="h-3 w-3 mr-1" />}
+                          {action.type === 'group' && <Users className="h-3 w-3 mr-1" />}
+                          {action.label}
+                        </Button>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
