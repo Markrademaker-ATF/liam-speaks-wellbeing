@@ -91,7 +91,7 @@ const Landing = () => {
               building better mental health with Liam!
             </p>
             
-            <div className="space-y-4 mb-12">
+            <div className="space-y-4">
               <Button 
                 onClick={handleGetStarted}
                 size="lg"
@@ -103,42 +103,6 @@ const Landing = () => {
               <p className="text-lg text-white/70">
                 Free, confidential, and available 24/7
               </p>
-            </div>
-
-            {/* Statistics Section */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <h3 className="text-2xl font-bold text-white mb-6 text-center">
-                Average Reduction
-              </h3>
-              <p className="text-sm text-white/80 mb-6 text-center">
-                in symptoms after Therabot (per user)
-              </p>
-              
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-white/90 text-lg">Major Depressive Disorder</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-3xl font-bold text-green-400">51%</span>
-                    <div className="text-green-400 text-2xl">↓</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-white/90 text-lg">Generalized Anxiety Disorder</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-3xl font-bold text-green-400">31%</span>
-                    <div className="text-green-400 text-2xl">↓</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between">
-                  <span className="text-white/90 text-lg">Eating Disorders</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-3xl font-bold text-green-400">19%</span>
-                    <div className="text-green-400 text-2xl">↓</div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
