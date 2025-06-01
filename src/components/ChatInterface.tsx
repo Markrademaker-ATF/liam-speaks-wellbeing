@@ -33,7 +33,6 @@ interface Message {
   timestamp: Date;
   tone?: string;
   suggestedActions?: SuggestedAction[];
-  resourcePlan?: ResourcePlan;
 }
 
 interface ChatInterfaceProps {
@@ -46,9 +45,12 @@ interface ChatHeaderProps {
   selectedTone: string;
   onBack: () => void;
   onToneChange: (tone: string) => void;
+  currentResourcePlan: ResourcePlan | null;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneChange }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneChange, currentResourcePlan }) => {
+  const [showResourcePlan, setShowResourcePlan] = useState(false);
+
   return (
     <div className="bg-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50 sticky top-0 z-50">
       <div className="max-w-5xl mx-auto px-6 py-5">
@@ -87,118 +89,108 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneCha
             </div>
           </div>
           
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
-            <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
+          <div className="flex items-center space-x-4">
+            {currentResourcePlan && (
+              <Collapsible open={showResourcePlan} onOpenChange={setShowResourcePlan}>
+                <CollapsibleTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-indigo-100 hover:border-purple-300 transition-all duration-300 font-semibold"
+                  >
+                    <FileText className="w-4 h-4" />
+                    <span>Your Resource Plan</span>
+                    {showResourcePlan ? 
+                      <ChevronUp className="w-4 h-4" /> : 
+                      <ChevronDown className="w-4 h-4" />
+                    }
+                  </Button>
+                </CollapsibleTrigger>
+              </Collapsible>
+            )}
+            
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
+              <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  );
-};
-
-interface ResourcePlanProps {
-  resourcePlan: ResourcePlan;
-  messageId: string;
-  expanded: boolean;
-  toggleExpanded: (id: string) => void;
-}
-
-const ResourcePlanComponent: React.FC<ResourcePlanProps> = ({ resourcePlan, messageId, expanded, toggleExpanded }) => {
-  return (
-    <div className="mt-4 pt-4 border-t border-gray-100">
-      <Collapsible open={expanded} onOpenChange={() => toggleExpanded(messageId)}>
-        <CollapsibleTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full justify-between text-xs font-semibold bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-indigo-100 hover:border-purple-300 transition-all duration-300"
-          >
-            <div className="flex items-center">
-              <FileText className="w-3 h-3 mr-2" />
-              View Personalized Resource Plan
-            </div>
-            {expanded ? 
-              <ChevronUp className="w-3 h-3" /> : 
-              <ChevronDown className="w-3 h-3" />
-            }
-          </Button>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="mt-3">
-          <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-bold text-purple-900 flex items-center">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Your Personalized Resource Plan
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-xs">
-              <div>
-                <h4 className="font-semibold text-purple-800 mb-2">Summary</h4>
-                <p className="text-purple-700">{resourcePlan.summary}</p>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold text-purple-800 mb-2">Key Advice</h4>
-                <ul className="space-y-1">
-                  {resourcePlan.keyAdvice.map((advice, idx) => (
-                    <li key={idx} className="flex items-start text-purple-700">
-                      <span className="text-purple-500 mr-2">•</span>
-                      {advice}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold text-purple-800 mb-2">Recommended Resources</h4>
-                <div className="space-y-2">
-                  {resourcePlan.recommendedLinks.map((link, idx) => (
-                    <div key={idx} className="bg-white/70 rounded-lg p-2 border border-purple-200">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="p-0 h-auto text-left w-full justify-start hover:bg-transparent"
-                        onClick={() => window.open(link.url, '_blank')}
-                      >
-                        <div>
-                          <div className="font-medium text-purple-800 flex items-center">
-                            <ExternalLink className="w-3 h-3 mr-1" />
-                            {link.title}
-                          </div>
-                          <div className="text-purple-600 text-xs mt-1">{link.description}</div>
-                        </div>
-                      </Button>
-                    </div>
-                  ))}
+        
+        {currentResourcePlan && (
+          <CollapsibleContent className="mt-4">
+            <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg font-bold text-purple-900 flex items-center">
+                  <Sparkles className="w-5 h-5 mr-2" />
+                  Your Personalized Resource Plan
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-2">Summary</h4>
+                  <p className="text-purple-700">{currentResourcePlan.summary}</p>
                 </div>
-              </div>
+                
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-2">Key Advice</h4>
+                  <ul className="space-y-2">
+                    {currentResourcePlan.keyAdvice.map((advice, idx) => (
+                      <li key={idx} className="flex items-start text-purple-700">
+                        <span className="text-purple-500 mr-2 font-bold">•</span>
+                        {advice}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-              <div>
-                <h4 className="font-semibold text-purple-800 mb-2">Next Steps</h4>
-                <ol className="space-y-1">
-                  {resourcePlan.nextSteps.map((step, idx) => (
-                    <li key={idx} className="flex items-start text-purple-700">
-                      <span className="text-purple-500 mr-2 font-medium">{idx + 1}.</span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </CardContent>
-          </Card>
-        </CollapsibleContent>
-      </Collapsible>
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-2">Recommended Resources</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {currentResourcePlan.recommendedLinks.map((link, idx) => (
+                      <div key={idx} className="bg-white/70 rounded-lg p-3 border border-purple-200 hover:bg-white/90 transition-all duration-300">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="p-0 h-auto text-left w-full justify-start hover:bg-transparent"
+                          onClick={() => window.open(link.url, '_blank')}
+                        >
+                          <div>
+                            <div className="font-medium text-purple-800 flex items-center mb-1">
+                              <ExternalLink className="w-4 h-4 mr-2" />
+                              {link.title}
+                            </div>
+                            <div className="text-purple-600 text-sm">{link.description}</div>
+                          </div>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-2">Next Steps</h4>
+                  <ol className="space-y-2">
+                    {currentResourcePlan.nextSteps.map((step, idx) => (
+                      <li key={idx} className="flex items-start text-purple-700">
+                        <span className="text-purple-500 mr-3 font-bold bg-purple-100 rounded-full w-6 h-6 flex items-center justify-center text-xs">{idx + 1}</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              </CardContent>
+            </Card>
+          </CollapsibleContent>
+        )}
+      </div>
     </div>
   );
 };
 
 interface MessageCardProps {
   message: Message;
-  expandedPlans: Set<string>;
-  toggleResourcePlan: (id: string) => void;
 }
 
-const MessageCard: React.FC<MessageCardProps> = ({ message, expandedPlans, toggleResourcePlan }) => {
+const MessageCard: React.FC<MessageCardProps> = ({ message }) => {
   return (
     <div
       className={`max-w-md lg:max-w-lg group ${
@@ -258,15 +250,6 @@ const MessageCard: React.FC<MessageCardProps> = ({ message, expandedPlans, toggl
               </div>
             </div>
           )}
-
-          {message.sender === 'liam' && message.resourcePlan && (
-            <ResourcePlanComponent
-              resourcePlan={message.resourcePlan}
-              messageId={message.id}
-              expanded={expandedPlans.has(message.id)}
-              toggleExpanded={toggleResourcePlan}
-            />
-          )}
         </CardContent>
       </Card>
     </div>
@@ -285,7 +268,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [expandedPlans, setExpandedPlans] = useState<Set<string>>(new Set());
+  const [currentResourcePlan, setCurrentResourcePlan] = useState<ResourcePlan | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -609,18 +592,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
     return toneResponses[Math.floor(Math.random() * toneResponses.length)];
   };
 
-  const toggleResourcePlan = (messageId: string) => {
-    setExpandedPlans(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(messageId)) {
-        newSet.delete(messageId);
-      } else {
-        newSet.add(messageId);
-      }
-      return newSet;
-    });
-  };
-
   const handleSendMessage = () => {
     if (!inputValue.trim()) return;
 
@@ -647,14 +618,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       const suggestedActions = getSuggestedActions(inputValue);
       const resourcePlan = generateResourcePlan(inputValue, selectedTone);
       
+      // Update the current resource plan in the header
+      setCurrentResourcePlan(resourcePlan);
+      
       const liamResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: generateLiamResponse(inputValue, selectedTone),
         sender: 'liam',
         timestamp: new Date(),
         tone: selectedTone,
-        suggestedActions: suggestedActions,
-        resourcePlan: resourcePlan
+        suggestedActions: suggestedActions
       };
       setMessages(prev => [...prev, liamResponse]);
       setIsTyping(false);
@@ -670,7 +643,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30">
-      <ChatHeader selectedTone={selectedTone} onBack={onBack} onToneChange={onToneChange} />
+      <ChatHeader 
+        selectedTone={selectedTone} 
+        onBack={onBack} 
+        onToneChange={onToneChange} 
+        currentResourcePlan={currentResourcePlan}
+      />
 
       <div className="bg-gradient-to-r from-red-50 via-pink-50 to-red-50 border-b border-red-200/50 p-4 shadow-sm">
         <div className="max-w-5xl mx-auto flex items-center justify-center space-x-3 text-red-800">
@@ -698,7 +676,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
               style={{ animationDelay: `${index * 0.1}s` }}
             >
-              <MessageCard message={message} expandedPlans={expandedPlans} toggleResourcePlan={toggleResourcePlan} />
+              <MessageCard message={message} />
             </div>
           ))}
           
