@@ -15,6 +15,10 @@ const Landing = () => {
     navigate('/about');
   };
 
+  const handlePrivacy = () => {
+    navigate('/privacy');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 relative overflow-hidden">
       {/* Dynamic background elements */}
@@ -57,6 +61,12 @@ const Landing = () => {
             className="hover:text-white transition-colors"
           >
             About
+          </button>
+          <button 
+            onClick={handlePrivacy}
+            className="hover:text-white transition-colors"
+          >
+            Privacy
           </button>
           <a href="#" className="hover:text-white transition-colors">Help</a>
           <button 
