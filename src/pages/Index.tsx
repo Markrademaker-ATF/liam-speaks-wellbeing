@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { MessageCircle, Heart, Shield, Users, Phone, Mail } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
+import { MessageCircle, Heart, Shield, Users, Phone, Mail, ChevronDown } from 'lucide-react';
 import ChatInterface from '@/components/ChatInterface';
 import ToneSelector from '@/components/ToneSelector';
 import ResourceCard from '@/components/ResourceCard';
@@ -68,9 +70,80 @@ const Index = () => {
                 <p className="text-sm text-gray-600">Mental Health Support</p>
               </div>
             </div>
-            <Badge variant="secondary" className="bg-green-100 text-green-800">
-              Available 24/7
-            </Badge>
+            
+            <div className="flex items-center space-x-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="flex items-center space-x-2 border-blue-200 text-blue-700 hover:bg-blue-50">
+                    <span>Take Action</span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-white shadow-lg border border-gray-200 z-50">
+                  <DropdownMenuItem asChild>
+                    <a 
+                      href="https://menshealthfoundation.ca/mens-health-check/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="cursor-pointer"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold">Men's Health Check</span>
+                        <span className="text-sm text-gray-600">Learn Your Health Risks</span>
+                      </div>
+                    </a>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem asChild>
+                    <a 
+                      href="https://menshealthfoundation.ca/mindfit-toolkit/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="cursor-pointer"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold">MindFit Toolkit</span>
+                        <span className="text-sm text-gray-600">Explore Mental Health Tools</span>
+                      </div>
+                    </a>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuItem asChild>
+                    <a 
+                      href="https://menshealthfoundation.ca/dont-change-much-podcast/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="cursor-pointer"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold">Don't Change Much Podcast</span>
+                        <span className="text-sm text-gray-600">Listen to Real Stories</span>
+                      </div>
+                    </a>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem asChild>
+                    <a 
+                      href="https://menshealthfoundation.ca/never-alone-june-2025/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="cursor-pointer"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold">Never Alone: June 2025</span>
+                        <span className="text-sm text-gray-600">Men's Health Month</span>
+                      </div>
+                    </a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              
+              <Badge variant="secondary" className="bg-green-100 text-green-800">
+                Available 24/7
+              </Badge>
+            </div>
           </div>
         </div>
       </header>
