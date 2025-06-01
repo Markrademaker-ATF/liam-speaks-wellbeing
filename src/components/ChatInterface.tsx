@@ -106,6 +106,70 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneCha
                     }
                   </Button>
                 </CollapsibleTrigger>
+                <CollapsibleContent className="mt-4">
+                  <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg font-bold text-purple-900 flex items-center">
+                        <Sparkles className="w-5 h-5 mr-2" />
+                        Your Personalized Resource Plan
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                      <div>
+                        <h4 className="font-semibold text-purple-800 mb-2">Summary</h4>
+                        <p className="text-purple-700">{currentResourcePlan.summary}</p>
+                      </div>
+                      
+                      <div>
+                        <h4 className="font-semibold text-purple-800 mb-2">Key Advice</h4>
+                        <ul className="space-y-2">
+                          {currentResourcePlan.keyAdvice.map((advice, idx) => (
+                            <li key={idx} className="flex items-start text-purple-700">
+                              <span className="text-purple-500 mr-2 font-bold">•</span>
+                              {advice}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-purple-800 mb-2">Recommended Resources</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {currentResourcePlan.recommendedLinks.map((link, idx) => (
+                            <div key={idx} className="bg-white/70 rounded-lg p-3 border border-purple-200 hover:bg-white/90 transition-all duration-300">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="p-0 h-auto text-left w-full justify-start hover:bg-transparent"
+                                onClick={() => window.open(link.url, '_blank')}
+                              >
+                                <div>
+                                  <div className="font-medium text-purple-800 flex items-center mb-1">
+                                    <ExternalLink className="w-4 h-4 mr-2" />
+                                    {link.title}
+                                  </div>
+                                  <div className="text-purple-600 text-sm">{link.description}</div>
+                                </div>
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="font-semibold text-purple-800 mb-2">Next Steps</h4>
+                        <ol className="space-y-2">
+                          {currentResourcePlan.nextSteps.map((step, idx) => (
+                            <li key={idx} className="flex items-start text-purple-700">
+                              <span className="text-purple-500 mr-3 font-bold bg-purple-100 rounded-full w-6 h-6 flex items-center justify-center text-xs">{idx + 1}</span>
+                              {step}
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CollapsibleContent>
               </Collapsible>
             )}
             
@@ -114,73 +178,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneCha
             </div>
           </div>
         </div>
-        
-        {currentResourcePlan && (
-          <CollapsibleContent className="mt-4">
-            <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg font-bold text-purple-900 flex items-center">
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Your Personalized Resource Plan
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h4 className="font-semibold text-purple-800 mb-2">Summary</h4>
-                  <p className="text-purple-700">{currentResourcePlan.summary}</p>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-purple-800 mb-2">Key Advice</h4>
-                  <ul className="space-y-2">
-                    {currentResourcePlan.keyAdvice.map((advice, idx) => (
-                      <li key={idx} className="flex items-start text-purple-700">
-                        <span className="text-purple-500 mr-2 font-bold">•</span>
-                        {advice}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-purple-800 mb-2">Recommended Resources</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {currentResourcePlan.recommendedLinks.map((link, idx) => (
-                      <div key={idx} className="bg-white/70 rounded-lg p-3 border border-purple-200 hover:bg-white/90 transition-all duration-300">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="p-0 h-auto text-left w-full justify-start hover:bg-transparent"
-                          onClick={() => window.open(link.url, '_blank')}
-                        >
-                          <div>
-                            <div className="font-medium text-purple-800 flex items-center mb-1">
-                              <ExternalLink className="w-4 h-4 mr-2" />
-                              {link.title}
-                            </div>
-                            <div className="text-purple-600 text-sm">{link.description}</div>
-                          </div>
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-purple-800 mb-2">Next Steps</h4>
-                  <ol className="space-y-2">
-                    {currentResourcePlan.nextSteps.map((step, idx) => (
-                      <li key={idx} className="flex items-start text-purple-700">
-                        <span className="text-purple-500 mr-3 font-bold bg-purple-100 rounded-full w-6 h-6 flex items-center justify-center text-xs">{idx + 1}</span>
-                        {step}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </CardContent>
-            </Card>
-          </CollapsibleContent>
-        )}
       </div>
     </div>
   );
