@@ -7,6 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText, Zap } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from 'react-router-dom';
+import DataConsentForm, { ConsentData } from './DataConsentForm';
 
 interface ResourcePlan {
   summary: string;
@@ -190,15 +191,9 @@ const MessageCard: React.FC<MessageCardProps> = ({ message }) => {
 };
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: getWelcomeMessage(selectedTone),
-      sender: 'liam',
-      timestamp: new Date(),
-      tone: selectedTone
-    }
-  ]);
+  const [showConsentForm, setShowConsentForm] = useState(true);
+  const [consentData, setConsentData] = useState<ConsentData | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -212,26 +207,41 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
   }, [messages]);
 
   useEffect(() => {
-    // Update welcome message when tone changes
-    setMessages(prev => [
-      {
+    // Initialize welcome message when consent is completed and tone changes
+    if (!showConsentForm && messages.length === 0) {
+      setMessages([{
         id: '1',
-        content: getWelcomeMessage(selectedTone),
+        content: getWelcomeMessage(selectedTone, consentData?.preferredName),
         sender: 'liam',
         timestamp: new Date(),
         tone: selectedTone
-      },
-      ...prev.slice(1)
-    ]);
-  }, [selectedTone]);
+      }]);
+    }
+  }, [selectedTone, showConsentForm, consentData]);
 
-  function getWelcomeMessage(tone: string): string {
+  const handleConsentComplete = (data: ConsentData | null) => {
+    setConsentData(data);
+    setShowConsentForm(false);
+    
+    // Initialize chat with welcome message
+    setMessages([{
+      id: '1',
+      content: getWelcomeMessage(selectedTone, data?.preferredName),
+      sender: 'liam',
+      timestamp: new Date(),
+      tone: selectedTone
+    }]);
+  };
+
+  function getWelcomeMessage(tone: string, preferredName?: string): string {
+    const name = preferredName ? `, ${preferredName}` : '';
+    
     const welcomeMessages = {
-      supportive: "Hey there! I'm Liam, and I'm really glad you're here. Taking this step to reach out shows real strength. I'm here to listen, support you, and help connect you with the right resources. What's on your mind today?",
-      professional: "Hello, I'm Liam, your mental health support companion. I'm here to provide you with evidence-based guidance and connect you with appropriate professional resources. How can I assist you today?",
-      casual: "Hey! I'm Liam - think of me as that friend who's always got your back. No judgment here, just real talk and genuine support. What's going on, man?",
-      youthful: "What's up! I'm Liam, and I'm stoked you're here. Mental health is just as important as physical health, and talking about it is actually pretty awesome. What's happening in your world?",
-      mature: "Good day. I'm Liam, and I understand that reaching out can take considerable courage, especially for men of our generation. I respect your experience and am here to provide thoughtful support. What would you like to discuss?"
+      supportive: `Hey there${name}! I'm Liam, and I'm really glad you're here. Taking this step to reach out shows real strength. I'm here to listen, support you, and help connect you with the right resources. What's on your mind today?`,
+      professional: `Hello${name}, I'm Liam, your mental health support companion. I'm here to provide you with evidence-based guidance and connect you with appropriate professional resources. How can I assist you today?`,
+      casual: `Hey${name}! I'm Liam - think of me as that friend who's always got your back. No judgment here, just real talk and genuine support. What's going on, man?`,
+      youthful: `What's up${name}! I'm Liam, and I'm stoked you're here. Mental health is just as important as physical health, and talking about it is actually pretty awesome. What's happening in your world?`,
+      mature: `Good day${name}. I'm Liam, and I understand that reaching out can take considerable courage, especially for men of our generation. I respect your experience and am here to provide thoughtful support. What would you like to discuss?`
     };
     return welcomeMessages[tone as keyof typeof welcomeMessages] || welcomeMessages.supportive;
   }
@@ -567,6 +577,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
       handleSendMessage();
     }
   };
+
+  if (showConsentForm) {
+    return <DataConsentForm onComplete={handleConsentComplete} />;
+  }
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30">
