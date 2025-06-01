@@ -69,7 +69,7 @@ const Landing = () => {
             
             {/* Liam's image - increased by 1.2x scale */}
             <img 
-              src="/lovable-uploads/026d27c2-2cca-4ae6-811e-3fdd1dbc7ce7.png" 
+              src="/lovable-uploads/92635255-459e-4483-8970-921d2fd2a707.png" 
               alt="Liam - Your AI Mental Health Companion" 
               className="relative w-full max-w-4xl lg:max-w-6xl h-auto object-contain drop-shadow-2xl lg:translate-x-20 scale-[1.2]"
               style={{ marginBottom: '0' }}
