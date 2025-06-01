@@ -6,9 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
-import ToneSelector from './ToneSelector';
 import { useNavigate } from 'react-router-dom';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface ResourcePlan {
   summary: string;
@@ -39,16 +37,14 @@ interface Message {
 interface ChatInterfaceProps {
   selectedTone: string;
   onBack: () => void;
-  onToneChange: (tone: string) => void;
 }
 
 interface ChatHeaderProps {
   selectedTone: string;
   onBack: () => void;
-  onToneChange: (tone: string) => void;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneChange }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack }) => {
   const navigate = useNavigate();
 
   return (
@@ -100,10 +96,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneCha
               <span>View Your Resource Plan</span>
               <ExternalLink className="w-3 h-3" />
             </Button>
-            
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
-              <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
-            </div>
           </div>
         </div>
       </div>
@@ -181,7 +173,7 @@ const MessageCard: React.FC<MessageCardProps> = ({ message }) => {
   );
 };
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onToneChange }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -565,7 +557,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       <ChatHeader 
         selectedTone={selectedTone} 
         onBack={onBack} 
-        onToneChange={onToneChange} 
       />
 
       <div className="bg-gradient-to-r from-red-50 via-pink-50 to-red-50 border-b border-red-200/50 p-4 shadow-sm">
