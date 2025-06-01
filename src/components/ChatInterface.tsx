@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,7 +67,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack }) => {
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-green-400 rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-300 animate-pulse"></div>
                 <Avatar className="relative w-14 h-14 ring-3 ring-white/70 ring-offset-2 ring-offset-transparent shadow-lg">
-                  <AvatarImage src="/lovable-uploads/92635255-459e-4483-8970-921d2fd2a707.png" alt="Liam" />
+                  <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold text-lg">
                     L
                   </AvatarFallback>
