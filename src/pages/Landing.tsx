@@ -52,25 +52,25 @@ const Landing = () => {
 
       {/* Main content - Split layout */}
       <div className="relative z-10 flex flex-col lg:flex-row min-h-[calc(100vh-120px)]">
-        {/* Left side - Liam's large image - moved even further to the right */}
+        {/* Left side - Liam's larger image - moved even further to the right */}
         <div className="flex-1 flex items-end justify-center lg:justify-end relative lg:pr-0">
           <div className="relative w-full h-full flex items-end justify-center lg:justify-end lg:translate-x-24">
             {/* Glow effect behind Liam */}
-            <div className="absolute bottom-0 left-1/2 lg:left-4/5 transform -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-1/2 lg:left-4/5 transform -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
             
-            {/* Liam's image - positioned much further to the right */}
+            {/* Liam's image - made larger and positioned much further to the right */}
             <img 
               src="/lovable-uploads/026d27c2-2cca-4ae6-811e-3fdd1dbc7ce7.png" 
               alt="Liam - Your AI Mental Health Companion" 
-              className="relative w-full max-w-2xl lg:max-w-4xl h-auto object-contain drop-shadow-2xl"
+              className="relative w-full max-w-3xl lg:max-w-5xl h-auto object-contain drop-shadow-2xl"
               style={{ marginBottom: '0' }}
             />
           </div>
         </div>
 
-        {/* Right side - Content moved more to the right for better centering */}
+        {/* Right side - Content moved even more to the right for better centering */}
         <div className="flex-1 flex items-center justify-center lg:justify-start px-6 lg:px-16">
-          <div className="max-w-lg text-center lg:text-left lg:ml-8">
+          <div className="max-w-lg text-center lg:text-left lg:ml-16">
             <h1 className="text-5xl lg:text-7xl font-bold text-white mb-8 leading-tight">
               The AI companion
               <br />
