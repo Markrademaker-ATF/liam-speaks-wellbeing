@@ -137,14 +137,14 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="relative group">
+              <a href="/" className="relative group">
                 <img 
                   src="/lovable-uploads/25fe395b-beb5-478e-ad30-c2363a173a8c.png" 
                   alt="Canadian Men's Health Foundation" 
                   className="w-14 h-14 object-contain transition-transform duration-300 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-green-500/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
+              </a>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-900 to-green-900 bg-clip-text text-transparent">
                   Canadian Men's Health Foundation
