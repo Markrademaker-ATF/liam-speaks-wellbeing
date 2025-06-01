@@ -59,7 +59,7 @@ const Landing = () => {
       </header>
 
       {/* Main content - Split layout */}
-      <div className="relative z-10 flex flex-col lg:flex-row min-h-[calc(100vh-120px)]">
+      <div className="relative z-10 flex flex-col lg:flex-row min-h-[calc(150vh-120px)]">
         {/* Left side - Liam's larger image - moved even further to the right */}
         <div className="flex-1 flex items-end justify-center lg:justify-end relative lg:pr-0">
           <div className="relative w-full h-full flex items-end justify-center lg:justify-end lg:translate-x-24">
