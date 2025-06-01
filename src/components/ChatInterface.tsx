@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -157,84 +158,52 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
       baseResponse = "It sounds like you're experiencing some anxiety symptoms. Those feelings can be really challenging to deal with, but there are proven strategies and assessments that can help you understand what you're going through.";
     } else if (hasDepression) {
       baseResponse = "What you're describing sounds like it could be related to depression. Those feelings are valid and more common than you might think, especially among men who often don't talk about these experiences.";
-    } else {
-      const responses = {
-        supportive: [
-          "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
-          "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
-          "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
-        ],
-        professional: [
-          "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
-          "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
-          "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
-        ],
-        casual: [
-          "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
-          "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
-          "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
-        ],
-        youthful: [
-          "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
-          "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
-          "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
-        ],
-        mature: [
-          "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
-          "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
-          "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
-        ]
-      };
-  
-      const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
-      return toneResponses[Math.floor(Math.random() * toneResponses.length)];
     }
 
-    // Add tone-specific additions
-    const toneAdditions = {
-      supportive: " I want you to know that reaching out shows real strength, and I'm here to help you find the right resources.",
-      professional: " I recommend taking a proper assessment to better understand your symptoms and connect with appropriate professional support.",
-      casual: " The good news is there are some solid tools and people who can help you work through this stuff.",
-      youthful: " There are some really helpful assessments that can give you insight into what you're experiencing and point you toward the right support.",
-      mature: " I encourage you to consider a proper assessment, which can provide valuable insight and help guide you toward the most appropriate support."
+    // Add tone-specific additions for anxiety/depression
+    if (hasAnxiety || hasDepression) {
+      const toneAdditions = {
+        supportive: " I want you to know that reaching out shows real strength, and I'm here to help you find the right resources.",
+        professional: " I recommend taking a proper assessment to better understand your symptoms and connect with appropriate professional support.",
+        casual: " The good news is there are some solid tools and people who can help you work through this stuff.",
+        youthful: " There are some really helpful assessments that can give you insight into what you're experiencing and point you toward the right support.",
+        mature: " I encourage you to consider a proper assessment, which can provide valuable insight and help guide you toward the most appropriate support."
+      };
+      baseResponse += toneAdditions[tone as keyof typeof toneAdditions] || toneAdditions.supportive;
+      return baseResponse;
+    }
+
+    // If no specific keywords detected, return general supportive response
+    const responses = {
+      supportive: [
+        "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
+        "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
+        "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
+      ],
+      professional: [
+        "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
+        "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
+        "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
+      ],
+      casual: [
+        "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
+        "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
+        "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
+      ],
+      youthful: [
+        "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
+        "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
+        "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
+      ],
+      mature: [
+        "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
+        "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
+        "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
+      ]
     };
 
-    if (hasAnxiety || hasDepression) {
-      baseResponse += toneAdditions[tone as keyof typeof toneAdditions] || toneAdditions.supportive;
-    }
-
-    return baseResponse || (
-      const responses = {
-        supportive: [
-          "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
-          "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
-          "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
-        ],
-        professional: [
-          "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
-          "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
-          "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
-        ],
-        casual: [
-          "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
-          "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
-          "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
-        ],
-        youthful: [
-          "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
-          "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
-          "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
-        ],
-        mature: [
-          "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
-          "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
-          "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
-        ]
-      };
-  
-      const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
-      return toneResponses[Math.floor(Math.random() * toneResponses.length)];
-    );
+    const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
+    return toneResponses[Math.floor(Math.random() * toneResponses.length)];
   };
 
   const handleSendMessage = () => {
