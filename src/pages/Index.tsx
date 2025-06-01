@@ -392,6 +392,12 @@ const Index = () => {
                           <SelectValue placeholder="Select your main concern" />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="general" className="bg-blue-50 border-b-2 border-blue-200">
+                            <div className="flex flex-col py-1">
+                              <span className="font-semibold text-blue-900">Just want to talk</span>
+                              <span className="text-xs text-blue-600">Open conversation</span>
+                            </div>
+                          </SelectItem>
                           <SelectItem value="stress">General stress or overwhelm</SelectItem>
                           <SelectItem value="anxiety">Anxiety or worry</SelectItem>
                           <SelectItem value="depression">Feeling down or depressed</SelectItem>
@@ -400,7 +406,6 @@ const Index = () => {
                           <SelectItem value="isolation">Feeling isolated or lonely</SelectItem>
                           <SelectItem value="health-concerns">Health-related anxiety</SelectItem>
                           <SelectItem value="crisis">Crisis or urgent support needed</SelectItem>
-                          <SelectItem value="general">Just want to talk</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
