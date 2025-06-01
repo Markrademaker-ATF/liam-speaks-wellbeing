@@ -11,11 +11,12 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-blue-600 to-blue-800 relative overflow-hidden">
       {/* Background decorative elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-transparent"></div>
-      <div className="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
-      <div className="absolute bottom-40 right-20 w-24 h-24 bg-white/10 rounded-full blur-lg"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 to-blue-900/50"></div>
+      <div className="absolute top-20 left-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+      <div className="absolute bottom-40 right-20 w-32 h-32 bg-cyan-300/20 rounded-full blur-xl"></div>
+      <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-blue-300/15 rounded-full blur-lg"></div>
       
       {/* Header */}
       <header className="relative z-10 flex justify-between items-center p-6">
@@ -44,8 +45,8 @@ const Landing = () => {
         {/* Left side - Liam's large image */}
         <div className="flex-1 flex items-center justify-center relative">
           <div className="relative w-full h-full flex items-center justify-center">
-            {/* Glow effect behind Liam */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/30 to-cyan-400/30 blur-3xl scale-75"></div>
+            {/* Enhanced glow effect behind Liam */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-300/20 via-blue-400/25 to-cyan-300/20 blur-3xl scale-90"></div>
             
             {/* Liam's image - large and centered */}
             <img 
@@ -54,13 +55,13 @@ const Landing = () => {
               className="relative w-full max-w-lg h-auto object-contain drop-shadow-2xl"
             />
             
-            {/* Speech bubble */}
-            <div className="absolute top-8 left-8 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl max-w-xs lg:max-w-sm">
+            {/* Speech bubble - repositioned */}
+            <div className="absolute top-12 right-8 lg:top-16 lg:right-12 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-2xl max-w-xs border border-white/20">
               <p className="text-gray-800 font-medium text-sm lg:text-base">
                 Ready to talk about what's on your mind? I'm here to listen and support you.
               </p>
               {/* Speech bubble tail */}
-              <div className="absolute bottom-[-8px] left-8 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white/95"></div>
+              <div className="absolute bottom-[-8px] left-6 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white/95"></div>
             </div>
           </div>
         </div>
@@ -98,7 +99,7 @@ const Landing = () => {
       </div>
 
       {/* Bottom decorative gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-900/30 to-transparent"></div>
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-blue-800/40 to-transparent"></div>
     </div>
   );
 };
