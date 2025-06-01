@@ -11,9 +11,17 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 relative overflow-hidden">
       {/* Dynamic background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-800/30 via-slate-900/40 to-blue-900/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-slate-950/60 to-blue-950/70"></div>
+      
+      {/* Robot and human hands background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-5"
+        style={{
+          backgroundImage: `url('/lovable-uploads/4e50589d-fce6-4e72-b6af-20a4541ee195.png')`
+        }}
+      ></div>
       
       {/* Animated background orbs */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl animate-pulse"></div>
