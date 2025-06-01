@@ -110,7 +110,7 @@ const Landing = () => {
       </div>
 
       {/* Statistics Section */}
-      <div className="relative z-10 py-12 px-6">
+      <div className="relative z-10 py-8 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
