@@ -60,32 +60,32 @@ const Landing = () => {
 
       {/* Main content - Split layout */}
       <div className="relative z-10 flex flex-col lg:flex-row min-h-[calc(100vh-120px)]">
-        {/* Left side - Liam's larger image - adjusted to better align with text content */}
+        {/* Left side - Liam's larger image */}
         <div className="flex-1 flex items-end justify-center lg:justify-center relative lg:pr-0">
           <div className="relative w-full h-full flex items-end justify-center lg:justify-end">
             {/* Glow effect behind Liam */}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[1000px] h-[1000px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
             
-            {/* Liam's image - adjusted position to align better with text */}
+            {/* Liam's image - made significantly larger */}
             <img 
               src="/lovable-uploads/026d27c2-2cca-4ae6-811e-3fdd1dbc7ce7.png" 
               alt="Liam - Your AI Mental Health Companion" 
-              className="relative w-full max-w-3xl lg:max-w-5xl h-auto object-contain drop-shadow-2xl lg:translate-x-20"
+              className="relative w-full max-w-4xl lg:max-w-6xl h-auto object-contain drop-shadow-2xl lg:translate-x-20"
               style={{ marginBottom: '0' }}
             />
           </div>
         </div>
 
-        {/* Right side - Content moved even more to the right for better centering */}
+        {/* Right side - Content with larger text */}
         <div className="flex-1 flex items-center justify-center lg:justify-start px-6 lg:px-12">
-          <div className="max-w-lg text-center lg:text-left lg:ml-16">
-            <h1 className="text-5xl lg:text-7xl font-bold text-white mb-8 leading-tight">
+          <div className="max-w-xl text-center lg:text-left lg:ml-16">
+            <h1 className="text-6xl lg:text-8xl font-bold text-white mb-10 leading-tight">
               The AI companion
               <br />
               <span className="text-cyan-300 bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">who cares</span>
             </h1>
             
-            <p className="text-xl lg:text-2xl text-white/90 mb-10 leading-relaxed">
+            <p className="text-2xl lg:text-3xl text-white/90 mb-12 leading-relaxed">
               Always here to listen and support you. 
               Always on your side. Join Canadian men 
               building better mental health with Liam!
@@ -95,12 +95,12 @@ const Landing = () => {
               <Button 
                 onClick={handleGetStarted}
                 size="lg"
-                className="w-full lg:w-auto bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-5 px-16 rounded-full text-xl transition-all duration-300 transform hover:scale-105 shadow-xl border-0"
+                className="w-full lg:w-auto bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-6 px-20 rounded-full text-2xl transition-all duration-300 transform hover:scale-105 shadow-xl border-0"
               >
                 Start Talking with Liam
               </Button>
               
-              <p className="text-base text-white/70">
+              <p className="text-lg text-white/70">
                 Free, confidential, and available 24/7
               </p>
             </div>
