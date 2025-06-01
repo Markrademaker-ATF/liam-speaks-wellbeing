@@ -1,11 +1,10 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import ToneSelector from './ToneSelector';
 
@@ -254,116 +253,162 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
   };
 
   return (
-    <div className="flex flex-col h-screen">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b p-4">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="sm" onClick={onBack}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back
-            </Button>
-            <div className="flex items-center space-x-3">
-              <Avatar className="w-10 h-10">
-                <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold">
-                  L
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <h2 className="font-semibold text-gray-900">Liam</h2>
-                <Badge variant="secondary" className="text-xs bg-green-100 text-green-800">
-                  {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Mode
-                </Badge>
+    <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30">
+      {/* Enhanced Header */}
+      <div className="bg-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50 sticky top-0 z-50">
+        <div className="max-w-5xl mx-auto px-6 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={onBack}
+                className="hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 rounded-xl"
+              >
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Back
+              </Button>
+              <div className="flex items-center space-x-4 bg-gradient-to-r from-blue-50 to-green-50 px-4 py-2 rounded-2xl border border-blue-100/50">
+                <div className="relative">
+                  <Avatar className="w-12 h-12 ring-2 ring-blue-200/50 ring-offset-2 ring-offset-white">
+                    <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
+                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold text-lg">
+                      L
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
+                    <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5 animate-pulse"></div>
+                  </div>
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <h2 className="font-bold text-lg text-gray-900">Liam</h2>
+                    <Sparkles className="w-4 h-4 text-blue-500" />
+                  </div>
+                  <Badge variant="secondary" className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200 font-medium">
+                    {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Mode • Online
+                  </Badge>
+                </div>
               </div>
             </div>
+            
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
+              <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
+            </div>
           </div>
-          
-          <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
         </div>
       </div>
 
-      {/* Crisis Banner */}
-      <div className="bg-red-50 border-b border-red-200 p-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-center space-x-2 text-sm text-red-800">
-          <AlertTriangle className="h-4 w-4" />
-          <span>In crisis? Call 1-833-456-4566 for immediate support</span>
+      {/* Enhanced Crisis Banner */}
+      <div className="bg-gradient-to-r from-red-50 via-pink-50 to-red-50 border-b border-red-200/50 p-4 shadow-sm">
+        <div className="max-w-5xl mx-auto flex items-center justify-center space-x-3 text-red-800">
+          <div className="w-8 h-8 bg-red-500/10 rounded-full flex items-center justify-center">
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+          </div>
+          <span className="font-medium">Crisis Support Available 24/7</span>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="border-red-300 text-red-700 hover:bg-red-50 hover:border-red-400 transition-all duration-300"
+            onClick={() => window.open('tel:1-833-456-4566')}
+          >
+            <Phone className="h-3 w-3 mr-2" />
+            Call Now
+          </Button>
         </div>
       </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto bg-gray-50 p-4">
-        <div className="max-w-4xl mx-auto space-y-4">
-          {messages.map((message) => (
+      {/* Enhanced Messages Area */}
+      <div className="flex-1 overflow-y-auto p-6 space-y-1">
+        <div className="max-w-4xl mx-auto space-y-6">
+          {messages.map((message, index) => (
             <div
               key={message.id}
-              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}
+              style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div
-                className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg ${
+                className={`max-w-md lg:max-w-lg group ${
                   message.sender === 'user'
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-900 shadow-sm border'
+                    ? 'order-2'
+                    : 'order-1'
                 }`}
               >
                 {message.sender === 'liam' && (
-                  <div className="flex items-center space-x-2 mb-2">
-                    <Avatar className="w-6 h-6">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <Avatar className="w-8 h-8 ring-2 ring-blue-100 ring-offset-1 ring-offset-blue-50">
                       <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xs font-bold">
+                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-sm font-bold">
                         L
                       </AvatarFallback>
                     </Avatar>
-                    <span className="text-xs font-medium text-gray-600">Liam</span>
-                  </div>
-                )}
-                <p className="text-sm">{message.content}</p>
-                {message.sender === 'liam' && message.suggestedActions && (
-                  <div className="mt-3 pt-3 border-t border-gray-100 space-y-2">
-                    <p className="text-xs font-medium text-gray-600 mb-2">Suggested next steps:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {message.suggestedActions.map((action, index) => (
-                        <Button
-                          key={index}
-                          size="sm"
-                          variant={action.type === 'assessment' ? "default" : "outline"}
-                          className={`text-xs ${
-                            action.type === 'assessment' 
-                              ? 'bg-orange-500 hover:bg-orange-600 text-white' 
-                              : 'border-blue-200 text-blue-700 hover:bg-blue-50'
-                          }`}
-                          onClick={() => window.open(action.url, '_blank')}
-                        >
-                          {action.type === 'assessment' && <ExternalLink className="h-3 w-3 mr-1" />}
-                          {action.type === 'support' && <Phone className="h-3 w-3 mr-1" />}
-                          {action.type === 'group' && <Users className="h-3 w-3 mr-1" />}
-                          {action.label}
-                        </Button>
-                      ))}
+                    <div>
+                      <span className="text-sm font-semibold text-gray-700">Liam</span>
+                      <span className="text-xs text-gray-500 ml-2">AI Mental Health Companion</span>
                     </div>
                   </div>
                 )}
+                
+                <Card className={`transition-all duration-300 hover:shadow-md group-hover:scale-[1.02] ${
+                  message.sender === 'user'
+                    ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white border-blue-600 shadow-blue-100'
+                    : 'bg-white/90 backdrop-blur-sm text-gray-900 shadow-sm border-gray-200/50 hover:bg-white'
+                }`}>
+                  <CardContent className="p-4">
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                    
+                    {message.sender === 'liam' && message.suggestedActions && (
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <p className="text-xs font-semibold text-gray-600 mb-3 flex items-center">
+                          <Sparkles className="w-3 h-3 mr-1" />
+                          Suggested Next Steps
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {message.suggestedActions.map((action, actionIndex) => (
+                            <Button
+                              key={actionIndex}
+                              size="sm"
+                              variant={action.type === 'assessment' ? "default" : "outline"}
+                              className={`text-xs transition-all duration-300 hover:scale-105 ${
+                                action.type === 'assessment' 
+                                  ? 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-orange-200' 
+                                  : 'border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300'
+                              }`}
+                              onClick={() => window.open(action.url, '_blank')}
+                            >
+                              {action.type === 'assessment' && <ExternalLink className="h-3 w-3 mr-1" />}
+                              {action.type === 'support' && <Phone className="h-3 w-3 mr-1" />}
+                              {action.type === 'group' && <Users className="h-3 w-3 mr-1" />}
+                              {action.label}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </div>
             </div>
           ))}
           
           {isTyping && (
-            <div className="flex justify-start">
-              <div className="bg-white text-gray-900 shadow-sm border max-w-xs lg:max-w-md px-4 py-3 rounded-lg">
-                <div className="flex items-center space-x-2 mb-2">
-                  <Avatar className="w-6 h-6">
-                    <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
-                    <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-xs font-bold">
-                      L
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-xs font-medium text-gray-600">Liam</span>
-                </div>
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
+            <div className="flex justify-start animate-fade-in">
+              <div className="flex items-center space-x-3 mb-3">
+                <Avatar className="w-8 h-8 ring-2 ring-blue-100 ring-offset-1 ring-offset-blue-50">
+                  <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
+                  <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-sm font-bold">
+                    L
+                  </AvatarFallback>
+                </Avatar>
+                <Card className="bg-white/90 backdrop-blur-sm shadow-sm border-gray-200/50">
+                  <CardContent className="p-4">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           )}
@@ -371,19 +416,33 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
         </div>
       </div>
 
-      {/* Input */}
-      <div className="bg-white border-t p-4">
-        <div className="max-w-4xl mx-auto flex space-x-3">
-          <Input
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="Type your message here..."
-            className="flex-1"
-          />
-          <Button onClick={handleSendMessage} disabled={!inputValue.trim()}>
-            <Send className="h-4 w-4" />
-          </Button>
+      {/* Enhanced Input Area */}
+      <div className="bg-white/95 backdrop-blur-xl border-t border-gray-200/50 p-6 shadow-lg">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex space-x-4 items-end">
+            <div className="flex-1 relative">
+              <Input
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Type your message here... I'm here to listen and support you."
+                className="pr-12 py-4 text-base border-gray-300 focus:border-blue-400 focus:ring-blue-400/20 rounded-2xl bg-white/90 backdrop-blur-sm transition-all duration-300 placeholder:text-gray-400"
+              />
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <MessageCircle className="h-5 w-5" />
+              </div>
+            </div>
+            <Button 
+              onClick={handleSendMessage} 
+              disabled={!inputValue.trim()}
+              className="bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white px-6 py-4 rounded-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg hover:shadow-xl"
+            >
+              <Send className="h-5 w-5" />
+            </Button>
+          </div>
+          <p className="text-xs text-gray-500 mt-2 text-center">
+            Your conversations with Liam are confidential and designed to provide supportive guidance.
+          </p>
         </div>
       </div>
     </div>
