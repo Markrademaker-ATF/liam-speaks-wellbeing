@@ -1,10 +1,11 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText } from 'lucide-react';
+import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText, Zap } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from 'react-router-dom';
 
@@ -48,39 +49,55 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50 sticky top-0 z-50">
-      <div className="max-w-5xl mx-auto px-6 py-5">
+    <div className="bg-gradient-to-r from-white via-blue-50/30 to-green-50/30 backdrop-blur-xl shadow-xl border-b border-gradient-to-r from-blue-200/30 to-green-200/30 sticky top-0 z-50">
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 via-transparent to-green-600/5"></div>
+      <div className="relative max-w-5xl mx-auto px-6 py-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-6">
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={onBack}
-              className="hover:bg-blue-50 hover:text-blue-700 transition-all duration-300 rounded-xl"
+              className="group hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:text-blue-700 transition-all duration-300 rounded-xl border border-transparent hover:border-blue-200/50 hover:shadow-md hover:scale-105"
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
               Back
             </Button>
-            <div className="flex items-center space-x-4 bg-gradient-to-r from-blue-50 to-green-50 px-4 py-2 rounded-2xl border border-blue-100/50">
-              <div className="relative">
-                <Avatar className="w-12 h-12 ring-2 ring-blue-200/50 ring-offset-2 ring-offset-white">
-                  <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
+            
+            <div className="flex items-center space-x-5 bg-gradient-to-r from-white/80 via-blue-50/50 to-green-50/50 backdrop-blur-md px-6 py-3 rounded-3xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-green-400 rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-300 animate-pulse"></div>
+                <Avatar className="relative w-14 h-14 ring-3 ring-white/70 ring-offset-2 ring-offset-transparent shadow-lg">
+                  <AvatarImage src="/lovable-uploads/92635255-459e-4483-8970-921d2fd2a707.png" alt="Liam" />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white font-bold text-lg">
                     L
                   </AvatarFallback>
                 </Avatar>
-                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-sm">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full border-3 border-white shadow-lg">
                   <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5 animate-pulse"></div>
                 </div>
               </div>
-              <div>
-                <div className="flex items-center space-x-2">
-                  <h2 className="font-bold text-lg text-gray-900">Liam</h2>
-                  <Sparkles className="w-4 h-4 text-blue-500" />
+              
+              <div className="flex flex-col space-y-1">
+                <div className="flex items-center space-x-3">
+                  <h2 className="font-bold text-xl bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+                    Liam
+                  </h2>
+                  <div className="flex items-center space-x-1">
+                    <Sparkles className="w-4 h-4 text-blue-500 animate-pulse" />
+                    <Zap className="w-3 h-3 text-green-500" />
+                  </div>
                 </div>
-                <Badge variant="secondary" className="text-xs bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border-green-200 font-medium">
-                  {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Mode • Online
-                </Badge>
+                <div className="flex items-center space-x-2">
+                  <Badge 
+                    variant="secondary" 
+                    className="text-xs bg-gradient-to-r from-green-100/80 to-emerald-100/80 text-green-800 border border-green-200/50 font-medium px-3 py-1 rounded-full shadow-sm"
+                  >
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                    {selectedTone.charAt(0).toUpperCase() + selectedTone.slice(1)} Mode
+                  </Badge>
+                  <span className="text-xs text-gray-500 font-medium">AI Mental Health Companion</span>
+                </div>
               </div>
             </div>
           </div>
@@ -89,12 +106,12 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack }) => {
             <Button
               variant="outline"
               size="sm"
-              className="flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-indigo-100 hover:border-purple-300 transition-all duration-300 font-semibold"
+              className="group flex items-center space-x-2 bg-gradient-to-r from-purple-50/80 to-indigo-50/80 backdrop-blur-sm border-purple-200/50 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100/90 hover:to-indigo-100/90 hover:border-purple-300/70 transition-all duration-300 font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-105"
               onClick={() => navigate('/resource-plan')}
             >
-              <FileText className="w-4 h-4" />
-              <span>View Your Resource Plan</span>
-              <ExternalLink className="w-3 h-3" />
+              <FileText className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+              <span>Your Resource Plan</span>
+              <ExternalLink className="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
             </Button>
           </div>
         </div>
