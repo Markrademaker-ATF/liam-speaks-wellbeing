@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +5,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Heart, Phone, Mail, CheckCircle } from 'lucide-react';
+import { Shield, Heart, Phone, Mail, CheckCircle, ExternalLink } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface DataConsentFormProps {
   onComplete: (consentData: ConsentData | null) => void;
@@ -21,6 +21,7 @@ export interface ConsentData {
 }
 
 const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
+  const navigate = useNavigate();
   const [allowDataStorage, setAllowDataStorage] = useState(false);
   const [allowProactiveContact, setAllowProactiveContact] = useState(false);
   const [contactMethod, setContactMethod] = useState<'email' | 'phone' | ''>('');
@@ -158,12 +159,21 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
           <div className="bg-gray-50 p-4 rounded-lg">
             <div className="flex items-start space-x-3">
               <Heart className="w-5 h-5 text-red-500 mt-0.5" />
-              <div>
+              <div className="flex-1">
                 <p className="text-sm font-medium text-gray-800">Your Privacy Matters</p>
                 <p className="text-xs text-gray-600 mt-1">
                   All data is encrypted, securely stored, and never shared with third parties. 
                   You can change these preferences or delete your data at any time.
                 </p>
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="text-xs text-blue-600 hover:text-blue-800 p-0 h-auto mt-2"
+                  onClick={() => navigate('/privacy')}
+                >
+                  Read our full Privacy Policy
+                  <ExternalLink className="w-3 h-3 ml-1" />
+                </Button>
               </div>
             </div>
           </div>
