@@ -4,9 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Send, MessageCircle, Phone, Users, AlertTriangle, ExternalLink, Sparkles, FileText } from 'lucide-react';
 import { toast } from "@/hooks/use-toast";
 import ToneSelector from './ToneSelector';
+import { useNavigate } from 'react-router-dom';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface ResourcePlan {
@@ -45,11 +46,10 @@ interface ChatHeaderProps {
   selectedTone: string;
   onBack: () => void;
   onToneChange: (tone: string) => void;
-  currentResourcePlan: ResourcePlan | null;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneChange, currentResourcePlan }) => {
-  const [showResourcePlan, setShowResourcePlan] = useState(false);
+const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneChange }) => {
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white/95 backdrop-blur-xl shadow-lg border-b border-blue-100/50 sticky top-0 z-50">
@@ -90,88 +90,16 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, onToneCha
           </div>
           
           <div className="flex items-center space-x-4">
-            {currentResourcePlan && (
-              <Collapsible open={showResourcePlan} onOpenChange={setShowResourcePlan}>
-                <CollapsibleTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-indigo-100 hover:border-purple-300 transition-all duration-300 font-semibold"
-                  >
-                    <FileText className="w-4 h-4" />
-                    <span>Your Resource Plan</span>
-                    {showResourcePlan ? 
-                      <ChevronUp className="w-4 h-4" /> : 
-                      <ChevronDown className="w-4 h-4" />
-                    }
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent className="mt-4">
-                  <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-purple-200 shadow-lg">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg font-bold text-purple-900 flex items-center">
-                        <Sparkles className="w-5 h-5 mr-2" />
-                        Your Personalized Resource Plan
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-6">
-                      <div>
-                        <h4 className="font-semibold text-purple-800 mb-2">Summary</h4>
-                        <p className="text-purple-700">{currentResourcePlan.summary}</p>
-                      </div>
-                      
-                      <div>
-                        <h4 className="font-semibold text-purple-800 mb-2">Key Advice</h4>
-                        <ul className="space-y-2">
-                          {currentResourcePlan.keyAdvice.map((advice, idx) => (
-                            <li key={idx} className="flex items-start text-purple-700">
-                              <span className="text-purple-500 mr-2 font-bold">•</span>
-                              {advice}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold text-purple-800 mb-2">Recommended Resources</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          {currentResourcePlan.recommendedLinks.map((link, idx) => (
-                            <div key={idx} className="bg-white/70 rounded-lg p-3 border border-purple-200 hover:bg-white/90 transition-all duration-300">
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="p-0 h-auto text-left w-full justify-start hover:bg-transparent"
-                                onClick={() => window.open(link.url, '_blank')}
-                              >
-                                <div>
-                                  <div className="font-medium text-purple-800 flex items-center mb-1">
-                                    <ExternalLink className="w-4 h-4 mr-2" />
-                                    {link.title}
-                                  </div>
-                                  <div className="text-purple-600 text-sm">{link.description}</div>
-                                </div>
-                              </Button>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold text-purple-800 mb-2">Next Steps</h4>
-                        <ol className="space-y-2">
-                          {currentResourcePlan.nextSteps.map((step, idx) => (
-                            <li key={idx} className="flex items-start text-purple-700">
-                              <span className="text-purple-500 mr-3 font-bold bg-purple-100 rounded-full w-6 h-6 flex items-center justify-center text-xs">{idx + 1}</span>
-                              {step}
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </CollapsibleContent>
-              </Collapsible>
-            )}
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100 hover:to-indigo-100 hover:border-purple-300 transition-all duration-300 font-semibold"
+              onClick={() => navigate('/resource-plan')}
+            >
+              <FileText className="w-4 h-4" />
+              <span>View Your Resource Plan</span>
+              <ExternalLink className="w-3 h-3" />
+            </Button>
             
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 border border-gray-200/50 shadow-sm">
               <ToneSelector selectedTone={selectedTone} onToneChange={onToneChange} compact />
@@ -265,7 +193,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [currentResourcePlan, setCurrentResourcePlan] = useState<ResourcePlan | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -613,11 +540,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
 
     setTimeout(() => {
       const suggestedActions = getSuggestedActions(inputValue);
-      const resourcePlan = generateResourcePlan(inputValue, selectedTone);
-      
-      // Update the current resource plan in the header
-      setCurrentResourcePlan(resourcePlan);
-      
       const liamResponse: Message = {
         id: (Date.now() + 1).toString(),
         content: generateLiamResponse(inputValue, selectedTone),
@@ -644,7 +566,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack, onT
         selectedTone={selectedTone} 
         onBack={onBack} 
         onToneChange={onToneChange} 
-        currentResourcePlan={currentResourcePlan}
       />
 
       <div className="bg-gradient-to-r from-red-50 via-pink-50 to-red-50 border-b border-red-200/50 p-4 shadow-sm">
