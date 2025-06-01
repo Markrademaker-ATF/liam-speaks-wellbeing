@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
@@ -109,10 +108,8 @@ const Landing = () => {
         </div>
       </div>
 
-      {/* Separator */}
-      <div className="relative z-10 px-6 py-8">
-        <Separator className="bg-white/20" />
-      </div>
+      {/* Gradient Transition */}
+      <div className="relative z-10 h-32 bg-gradient-to-b from-transparent via-slate-900/30 to-slate-900/60"></div>
 
       {/* Statistics Section */}
       <div className="relative z-10 py-16 px-6">
