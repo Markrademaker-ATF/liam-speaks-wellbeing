@@ -163,6 +163,20 @@ const Index = () => {
                 <DropdownMenuContent className="w-64 bg-white/95 backdrop-blur-md shadow-xl border border-gray-200/50 z-50">
                   <DropdownMenuItem asChild>
                     <a 
+                      href="/about"
+                      className="cursor-pointer hover:bg-indigo-50 transition-colors duration-200"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-semibold text-indigo-900">About Liam</span>
+                        <span className="text-sm text-gray-600">Learn How Liam Can Help You</span>
+                      </div>
+                    </a>
+                  </DropdownMenuItem>
+                  
+                  <DropdownMenuSeparator />
+                  
+                  <DropdownMenuItem asChild>
+                    <a 
                       href="https://menshealthfoundation.ca/mens-health-check/" 
                       target="_blank" 
                       rel="noopener noreferrer"
