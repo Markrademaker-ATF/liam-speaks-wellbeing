@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -177,7 +178,7 @@ const Index = () => {
                 <Button 
                   size="lg" 
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200"
-                  onClick={() => setShowChat(true)}
+                  onClick={() => window.open('https://menshealthfoundation.ca/wp-content/uploads/2025/05/Campaign-Toolkit-Mens-Health-Month-2025.pdf', '_blank')}
                 >
                   JOIN THE MOVEMENT
                 </Button>
