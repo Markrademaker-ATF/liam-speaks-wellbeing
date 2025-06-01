@@ -11,6 +11,10 @@ const Landing = () => {
     navigate('/chat');
   };
 
+  const handleAbout = () => {
+    navigate('/about');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 relative overflow-hidden">
       {/* Dynamic background elements */}
@@ -48,7 +52,12 @@ const Landing = () => {
           <span className="text-white font-bold text-xl">CMHF</span>
         </div>
         <nav className="hidden md:flex space-x-6 text-white/80">
-          <a href="#" className="hover:text-white transition-colors">About</a>
+          <button 
+            onClick={handleAbout}
+            className="hover:text-white transition-colors"
+          >
+            About
+          </button>
           <a href="#" className="hover:text-white transition-colors">Help</a>
           <button 
             onClick={handleGetStarted}
