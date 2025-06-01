@@ -200,6 +200,32 @@ const Landing = () => {
               </div>
             </div>
           </div>
+          
+          {/* Study Link */}
+          <div className="text-center mt-12">
+            <p className="text-white/70 mb-4">Based on clinical research from Dartmouth College</p>
+            <a 
+              href="https://home.dartmouth.edu/news/2025/03/first-therapy-chatbot-trial-yields-mental-health-benefits"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center text-cyan-300 hover:text-cyan-200 transition-colors text-lg underline"
+            >
+              View Full Study Results
+              <svg 
+                className="w-5 h-5 ml-2" 
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
 
