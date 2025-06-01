@@ -56,11 +56,11 @@ const Landing = () => {
         <div className="flex-1 flex items-end justify-center relative">
           <div className="relative w-full h-full flex items-end justify-center">
             {/* Glow effect behind Liam */}
-            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-t from-blue-400/30 via-blue-500/20 to-transparent rounded-full blur-3xl"></div>
             
-            {/* Liam's image - much larger now */}
+            {/* Liam's image - updated to use new image */}
             <img 
-              src="/lovable-uploads/43d6626d-43e6-4819-b569-29400860e958.png" 
+              src="/lovable-uploads/026d27c2-2cca-4ae6-811e-3fdd1dbc7ce7.png" 
               alt="Liam - Your AI Mental Health Companion" 
               className="relative w-full max-w-2xl lg:max-w-4xl h-auto object-contain drop-shadow-2xl"
               style={{ marginBottom: '0' }}
