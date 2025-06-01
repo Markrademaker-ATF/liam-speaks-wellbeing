@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
+import { Separator } from "@/components/ui/separator";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -103,6 +104,100 @@ const Landing = () => {
               <p className="text-lg text-white/70">
                 Free, confidential, and available 24/7
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Separator */}
+      <div className="relative z-10 px-6 py-8">
+        <Separator className="bg-white/20" />
+      </div>
+
+      {/* Statistics Section */}
+      <div className="relative z-10 py-16 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              Average
+              <br />
+              <span className="text-cyan-300">Reduction</span>
+            </h2>
+            <p className="text-xl text-white/80">in symptoms after Therabot (per user)</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Major Depressive Disorder */}
+            <div className="text-center">
+              <h3 className="text-xl lg:text-2xl font-semibold text-white mb-4">
+                Major Depressive
+                <br />
+                Disorder
+              </h3>
+              <div className="flex flex-col items-center mb-4">
+                <div className="text-6xl lg:text-7xl font-bold text-cyan-300 mb-4">51%</div>
+                <svg 
+                  className="w-16 h-16 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={3} 
+                    d="M19 14l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Generalized Anxiety Disorder */}
+            <div className="text-center">
+              <h3 className="text-xl lg:text-2xl font-semibold text-white mb-4">
+                Generalized Anxiety
+                <br />
+                Disorder
+              </h3>
+              <div className="flex flex-col items-center mb-4">
+                <div className="text-6xl lg:text-7xl font-bold text-cyan-300 mb-4">31%</div>
+                <svg 
+                  className="w-16 h-16 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={3} 
+                    d="M19 14l-7 7-7-7"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            {/* Eating Disorders */}
+            <div className="text-center">
+              <h3 className="text-xl lg:text-2xl font-semibold text-white mb-4">
+                Eating Disorders
+              </h3>
+              <div className="flex flex-col items-center mb-4">
+                <div className="text-6xl lg:text-7xl font-bold text-cyan-300 mb-4">19%</div>
+                <svg 
+                  className="w-16 h-16 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={3} 
+                    d="M19 14l-7 7-7-7"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
