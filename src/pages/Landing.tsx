@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
@@ -157,18 +156,18 @@ const Landing = () => {
           </div>
         </div>
 
-        {/* Right side - Content with larger text */}
+        {/* Right side - Content with smaller text */}
         <div className="flex-1 flex items-center justify-center lg:justify-start px-6 lg:px-12">
           <div className="max-w-xl text-center lg:text-left lg:ml-16">
-            <h1 className="text-6xl lg:text-8xl font-bold text-white mb-10 leading-tight">
+            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
               Meet Liam, your
               <br />
               <span className="text-cyan-300 bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">Care Companion</span>
               <br />
-              <span className="text-4xl lg:text-5xl">here to assist with your health and well-being</span>
+              <span className="text-2xl lg:text-3xl">here to assist with your health and well-being</span>
             </h1>
             
-            <p className="text-2xl lg:text-3xl text-white/90 mb-12 leading-relaxed">
+            <p className="text-lg lg:text-xl text-white/90 mb-10 leading-relaxed">
               Always here to listen and support you. 
               Always on your side. Join Canadian men 
               building better mental health with Liam!
