@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
@@ -164,7 +165,7 @@ const Landing = () => {
               <br />
               <span className="text-cyan-300 bg-gradient-to-r from-cyan-300 to-blue-300 bg-clip-text text-transparent">Care Companion</span>
               <br />
-              <span className="text-2xl lg:text-3xl">here to assist with your health and well-being</span>
+              <span className="text-2xl lg:text-3xl leading-tight">here to assist with your health and well-being</span>
             </h1>
             
             <p className="text-lg lg:text-xl text-white/90 mb-10 leading-relaxed">
