@@ -1,11 +1,72 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
 import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [currentText, setCurrentText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  const chatExample = [
+    {
+      sender: 'user',
+      text: "Hey Liam, I've been feeling really overwhelmed at work lately. I can't seem to focus and I'm constantly stressed.",
+      delay: 1000
+    },
+    {
+      sender: 'liam',
+      text: "I hear you, and I'm really glad you reached out. Work stress can feel overwhelming, especially when it affects your ability to focus. That sounds really challenging. Can you tell me a bit more about what's been making work feel so stressful lately?",
+      delay: 2000
+    },
+    {
+      sender: 'user',
+      text: "It's just everything piling up. My manager keeps giving me more projects, and I feel like I can never catch up. I'm working late every night but still falling behind.",
+      delay: 1500
+    },
+    {
+      sender: 'liam',
+      text: "That sounds incredibly exhausting. It makes complete sense that you'd feel overwhelmed when you're constantly trying to keep up with an ever-growing workload. Working late every night and still feeling behind can create a really draining cycle. Have you been able to talk to your manager about the workload, or does that feel difficult right now?",
+      delay: 2500
+    }
+  ];
+
+  useEffect(() => {
+    if (currentMessageIndex < chatExample.length) {
+      const message = chatExample[currentMessageIndex];
+      const timer = setTimeout(() => {
+        setIsTyping(true);
+        let index = 0;
+        setCurrentText('');
+        
+        const typeWriter = setInterval(() => {
+          if (index < message.text.length) {
+            setCurrentText(message.text.slice(0, index + 1));
+            index++;
+          } else {
+            clearInterval(typeWriter);
+            setIsTyping(false);
+            setTimeout(() => {
+              setCurrentMessageIndex(prev => prev + 1);
+            }, 1000);
+          }
+        }, 30);
+
+        return () => clearInterval(typeWriter);
+      }, message.delay);
+
+      return () => clearTimeout(timer);
+    } else {
+      // Reset animation after all messages
+      setTimeout(() => {
+        setCurrentMessageIndex(0);
+        setCurrentText('');
+      }, 3000);
+    }
+  }, [currentMessageIndex]);
 
   const handleGetStarted = () => {
     navigate('/chat');
@@ -123,6 +184,68 @@ const Landing = () => {
               <p className="text-lg text-white/70">
                 Free, confidential, and available 24/7
               </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Chat Example Section */}
+      <div className="relative z-10 py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold text-white mb-4">
+              See Liam in Action
+            </h2>
+            <p className="text-xl text-white/80">Real conversations, real support</p>
+          </div>
+          
+          {/* Chat Interface */}
+          <div className="bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 p-6 shadow-2xl">
+            <div className="flex items-center space-x-3 mb-6 pb-4 border-b border-white/20">
+              <Avatar className="w-10 h-10">
+                <AvatarImage src="/lovable-uploads/92635255-459e-4483-8970-921d2fd2a707.png" alt="Liam" />
+                <AvatarFallback>L</AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="text-white font-semibold">Liam</h3>
+                <p className="text-green-400 text-sm flex items-center">
+                  <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                  Online
+                </p>
+              </div>
+            </div>
+            
+            <div className="space-y-4 max-h-96 overflow-y-auto">
+              {chatExample.slice(0, currentMessageIndex + 1).map((message, index) => (
+                <div key={index} className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                    message.sender === 'user' 
+                      ? 'bg-blue-500 text-white' 
+                      : 'bg-white/90 text-gray-800'
+                  }`}>
+                    {index === currentMessageIndex ? (
+                      <div>
+                        {currentText}
+                        {isTyping && <span className="animate-pulse">|</span>}
+                      </div>
+                    ) : (
+                      message.text
+                    )}
+                  </div>
+                </div>
+              ))}
+              
+              {isTyping && currentMessageIndex < chatExample.length && (
+                <div className="flex justify-start">
+                  <div className="bg-white/90 text-gray-800 px-4 py-3 rounded-2xl">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
