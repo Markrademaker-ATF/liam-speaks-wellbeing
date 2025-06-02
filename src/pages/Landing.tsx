@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { useNavigate } from 'react-router-dom';
@@ -159,7 +158,7 @@ const Landing = () => {
 
         {/* Right side - Content with smaller text */}
         <div className="flex-1 flex items-center justify-center lg:justify-start px-6 lg:px-12">
-          <div className="max-w-xl text-center lg:text-left lg:ml-16">
+          <div className="max-w-2xl text-center lg:text-left lg:ml-16">
             <h1 className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight">
               Meet Liam, your
               <br />
