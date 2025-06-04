@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -207,7 +206,45 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [sessionId, setSessionId] = useState<string>('');
+  const [userId, setUserId] = useState<string>('');
+  const [isSessionInitialized, setIsSessionInitialized] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Single initialization effect
+  useEffect(() => {
+    const initSession = async () => {
+      try {
+        const result = await initializeSession();
+        if (typeof result === 'object') {
+          if ('error' in result) {
+            console.error('Session initialization failed:', result.message);
+            toast({
+              title: "Connection Error",
+              description: result.message,
+              variant: "destructive",
+            });
+            return;
+          }
+          
+          if ('sessionId' in result && 'userId' in result) {
+            console.log('Setting session state:', result);
+            setSessionId(result.sessionId);
+            setUserId(result.userId);
+            setIsSessionInitialized(true);
+          }
+        }
+      } catch (error) {
+        console.error('Session initialization error:', error);
+        toast({
+          title: "Connection Error",
+          description: "Failed to initialize chat session. Please try refreshing the page.",
+          variant: "destructive",
+        });
+      }
+    };
+    initSession();
+  }, []); // Only run once when component mounts
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -286,13 +323,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
     const crisisKeywords = [
       'suicide', 'kill myself', 'end it all', 'want to die', 'hurt myself',
       'self-harm', 'cutting', 'overdose', 'can\'t go on', 'no point',
-      'better off dead', 'harm myself'
+      'better off dead', 'harm myself', 'killing myself', 'suicide attempt',
+      'suicide thoughts', 'suicidal thoughts', 'suicidal ideation', 'suicidal intent',
     ];
     return crisisKeywords.some(keyword => 
       message.toLowerCase().includes(keyword.toLowerCase())
     );
   };
-
   const getSuggestedActions = (userMessage: string): SuggestedAction[] => {
     const actions: SuggestedAction[] = [];
     
@@ -477,84 +514,221 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
       url: "tel:1-833-456-4566",
       description: "Immediate support available anytime you need it"
     });
-
     return { summary, keyAdvice, recommendedLinks, nextSteps };
   };
 
-  const generateLiamResponse = (userMessage: string, tone: string): string => {
-    const isCrisis = detectCrisisKeywords(userMessage);
+  interface GeminiSafetySetting {
+    category: string;
+    threshold: string;
+  }
+  
+  interface GeminiGenerationConfig {
+    temperature?: number;
+    topP?: number;
+    topK?: number;
+    maxOutputTokens?: number;
+    stopSequences?: string[];
+  }
+  
+  interface GeminiContentPart {
+    text?: string;
+    // inlineData?: { mimeType: string; data: string; }; // For multimodal
+  }
+  
+  interface GeminiContent {
+    parts: GeminiContentPart[];
+    role?: string; // "user" or "model"
+  }
+  
+  interface GeminiApiRequestBody {
+    contents: GeminiContent[];
+    system_instruction?: GeminiContent; // For newer models and specific use cases
+    safetySettings?: GeminiSafetySetting[];
+    generationConfig?: GeminiGenerationConfig;
+  }
+  
+  interface GeminiApiResponse {
+    candidates?: Array<{
+      content?: GeminiContent;
+      finishReason?: string;
+      index?: number;
+      safetyRatings?: Array<{
+        category: string;
+        probability: string;
+        blocked?: boolean;
+      }>;
+    }>;
+    promptFeedback?: {
+      blockReason?: string;
+      safetyRatings?: Array<{
+        category: string;
+        probability: string;
+      }>;
+    };
+  }
+
+  const DEFAULT_MODEL_NAME = "gemini-2.0-flash";
+  const GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
+  const generateSessionId = () => Date.now().toString();
+  const generateUserId = () => `user_${Math.floor(Math.random() * 1000000)}`;
+
+  const initializeSession = async () => {
+    try {
+      const sessionId = generateSessionId();
+      const userId = generateUserId();
+      const sessionUrl = `https://cmhf-demo-1034025262875.us-central1.run.app/apps/cmhf_ai_demo/users/${userId}/sessions/${sessionId}`;
+
+      const requestBody = {
+        state: {
+          preferred_language: "English",
+          visit_count: 1
+        }
+      };
+
+      console.log('CMHF API Request - Initialize Session:', {
+        url: sessionUrl,
+        method: 'POST',
+        body: requestBody
+      });
+
+      const response = await fetch(sessionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('CMHF API Error - Session Initialization:', {
+          status: response.status,
+          statusText: response.statusText,
+          error: errorText,
+          url: sessionUrl
+        });
+        throw new Error(`Failed to initialize session: ${response.status} ${response.statusText}`);
+      }
+
+      const responseData = await response.json();
+      console.log('CMHF API Response - Session Initialization:', responseData);
+
+      // Use the session ID and user ID from the response
+      return { 
+        sessionId: responseData.id, // Use the ID from the response
+        userId: responseData.userId // Use the userId from the response
+      };
+    } catch (error) {
+      console.error('CMHF API Error - Session Initialization:', error);
+      if (error instanceof Error) {
+        return {
+          error: true,
+          message: error.message
+        };
+      }
+      return {
+        error: true,
+        message: "Failed to initialize chat session. Please try again."
+      };
+    }
+  };
+
+  const generateLiamResponse = async (userMessage: string, tone: string): Promise<string> => {
+    const API_URL = "https://cmhf-demo-1034025262875.us-central1.run.app/run_sse";
     
+    // Check if session is initialized
+    if (!isSessionInitialized || !sessionId || !userId) {
+      console.error('Session not initialized:', { isSessionInitialized, sessionId, userId });
+      return "I'm sorry, there was an issue with the chat session. Please try refreshing the page.";
+    }
+
+    const isCrisis = detectCrisisKeywords(userMessage);
+
     if (isCrisis) {
       return "I'm really concerned about what you're sharing with me. Your safety is the most important thing right now. Please consider reaching out to a crisis counselor immediately at 1-833-456-4566. They're available 24/7 and can provide immediate support. You don't have to go through this alone - there are people who want to help you right now.";
     }
 
-    const hasAnxiety = detectAnxietyKeywords(userMessage);
-    const hasDepression = detectDepressionKeywords(userMessage);
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          app_name: "cmhf_ai_demo",
+          user_id: userId,
+          session_id: sessionId,
+          new_message: {
+            role: "user",
+            parts: [{
+              text: `User message: "${userMessage}"`
+            }]
+          },
+          streaming: true
+        }),
+      });
 
-    let baseResponse = "";
-    
-    if (hasAnxiety && hasDepression) {
-      baseResponse = "I hear that you're dealing with both anxiety and depression symptoms. That can feel really overwhelming, but please know that these are common experiences and there are effective ways to address them.";
-    } else if (hasAnxiety) {
-      baseResponse = "It sounds like you're experiencing some anxiety symptoms. Those feelings can be really challenging to deal with, but there are proven strategies and assessments that can help you understand what you're going through.";
-    } else if (hasDepression) {
-      baseResponse = "What you're describing sounds like it could be related to depression. Those feelings are valid and more common than you might think, especially among men who often don't talk about these experiences.";
+      if (!response.ok) {
+        const errorBody = await response.text();
+        console.error('API error:', response.status, response.statusText, errorBody);
+        return "I'm sorry, I'm having trouble connecting right now. Please try again in a moment, or consider reaching out to a professional directly.";
+      }
+      const apiResponseText = await response.text();
+      console.log('API response:', apiResponseText);
+
+      // Split the response by newlines and filter out empty lines
+      const responseLines = apiResponseText.split('\n').filter(line => line.trim() !== '');
+      
+      // Get the last non-empty line which should contain the complete response
+      const lastLine = responseLines[responseLines.length - 1];
+      
+      // Remove 'data: ' prefix if present
+      const jsonString = lastLine.startsWith('data: ') ? lastLine.slice(6) : lastLine;
+      
+      try {
+        const data = JSON.parse(jsonString);
+        
+        // Handle the case where the response contains an error
+        if (data.error) {
+          console.error('API response error:', data.error);
+          return "I'm sorry, there was an issue processing your request. Please try again.";
+        }
+
+        // Extract the response text from the content parts
+        const responseText = data?.content?.parts?.[0]?.text || 
+                            data?.response?.text || 
+                            "I'm sorry, I couldn't generate a response at this time. Please try again.";
+
+        // Convert **text** to bold
+        const formattedResponse = responseText.replace(
+          /\*\*(.*?)\*\*/g,
+          '<strong>$1</strong>'
+        );
+        return formattedResponse;
+      } catch (error) {
+        console.error('Error parsing API response:', error);
+        return "I'm sorry, something went wrong while processing the response. Please try again later.";
+      }
+    } catch (error) {
+      console.error('Error calling API:', error);
+      return "I'm sorry, something went wrong while trying to generate a response. Please try again later.";
     }
-
-    if (hasAnxiety || hasDepression) {
-      const toneAdditions = {
-        supportive: " I want you to know that reaching out shows real strength, and I'm here to help you find the right resources.",
-        professional: " I recommend taking a proper assessment to better understand your symptoms and connect with appropriate professional support.",
-        casual: " The good news is there are some solid tools and people who can help you work through this stuff.",
-        youthful: " There are some really helpful assessments that can give you insight into what you're experiencing and point you toward the right support.",
-        mature: " I encourage you to consider a proper assessment, which can provide valuable insight and help guide you toward the most appropriate support."
-      };
-      baseResponse += toneAdditions[tone as keyof typeof toneAdditions] || toneAdditions.supportive;
-      return baseResponse;
-    }
-
-    const responses = {
-      supportive: [
-        "I hear you, and what you're feeling makes complete sense. Many men go through similar experiences, and it takes real courage to talk about it.",
-        "Thank you for sharing that with me. Your feelings are valid, and I want you to know that there are people and resources that can help.",
-        "I'm glad you felt comfortable enough to open up about this. Let's explore some ways we can get you the support you deserve."
-      ],
-      professional: [
-        "Based on what you've shared, I can connect you with evidence-based resources and qualified professionals who specialize in this area.",
-        "Your concerns align with common mental health challenges that many Canadian men face. There are established treatment protocols that can be very effective.",
-        "I recommend we connect you with a licensed mental health professional who can provide personalized assessment and treatment options."
-      ],
-      casual: [
-        "Man, that sounds really tough. But you know what? You're not alone in this - a lot of guys deal with similar stuff, they just don't always talk about it.",
-        "I get it, life can throw some serious curveballs. The good news is there are some really solid people and resources that can help you work through this.",
-        "Thanks for being real with me. Let's figure out how to get you connected with some people who can actually make a difference."
-      ],
-      youthful: [
-        "Dude, first off - major props for being brave enough to talk about this stuff. That's actually super mature and shows you're taking charge of your mental health.",
-        "I totally get that this feels overwhelming right now. But here's the thing - there are amazing resources and people who can help you navigate this.",
-        "You're already doing something awesome by reaching out. Let's connect you with some people who really know their stuff and can help you feel better."
-      ],
-      mature: [
-        "I appreciate you sharing this with me. Life's challenges can indeed feel overwhelming, particularly when we feel we should handle everything on our own.",
-        "Your experience resonates with many men who've walked similar paths. There's wisdom in seeking support, and it shows maturity and self-awareness.",
-        "Let me connect you with resources that respect your experience and can provide the thoughtful, professional support you deserve."
-      ]
-    };
-
-    const toneResponses = responses[tone as keyof typeof responses] || responses.supportive;
-    return toneResponses[Math.floor(Math.random() * toneResponses.length)];
   };
 
-  const handleSendMessage = () => {
+  // Function to handle sending a message in the chat interface
+  const handleSendMessage = async () => {
+    // Don't send empty messages
     if (!inputValue.trim()) return;
 
+    // Create a new message object with user input
     const userMessage: Message = {
-      id: Date.now().toString(),
-      content: inputValue,
-      sender: 'user',
-      timestamp: new Date()
+      id: Date.now().toString(), // Unique ID based on timestamp
+      content: inputValue,       // The message text from the input field
+      sender: 'user',            // Indicate this is a user message
+      timestamp: new Date()      // Current date/time
     };
 
+    // Add the new message to the messages array in state
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
@@ -567,11 +741,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
       });
     }
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const suggestedActions = getSuggestedActions(inputValue);
+      const response = await generateLiamResponse(inputValue, selectedTone);
       const liamResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: generateLiamResponse(inputValue, selectedTone),
+        content: response,
         sender: 'liam',
         timestamp: new Date(),
         tone: selectedTone,
@@ -632,7 +807,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
           
           {isTyping && (
             <div className="flex justify-start animate-fade-in">
-              <div className="flex items-center space-x-3 mb-3">
+              <div className="flex items-center space-x3 mb-3">
                 <Avatar className="w-8 h-8 ring-2 ring-blue-100 ring-offset-1 ring-offset-blue-50">
                   <AvatarImage src="/lovable-uploads/b277bfb0-6f11-4d9a-b1ea-2b1285189a74.png" alt="Liam" />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-green-500 text-white text-sm font-bold">
