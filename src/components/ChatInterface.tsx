@@ -661,7 +661,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
           new_message: {
             role: "user",
             parts: [{
-              text: `User message: "${userMessage}"`
+              text: `[Response Style: ${tone}] User message: "${userMessage}"`
             }]
           },
           streaming: true
