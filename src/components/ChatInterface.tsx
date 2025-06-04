@@ -700,10 +700,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
                             "I'm sorry, I couldn't generate a response at this time. Please try again.";
 
         // Convert **text** to bold
-        const formattedResponse = responseText.replace(
-          /\*\*(.*?)\*\*/g,
-          '<strong>$1</strong>'
-        );
+        const formattedResponse = responseText;
         return formattedResponse;
       } catch (error) {
         console.error('Error parsing API response:', error);
