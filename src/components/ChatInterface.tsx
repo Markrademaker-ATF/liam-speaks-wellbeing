@@ -43,9 +43,11 @@ interface ChatInterfaceProps {
 interface ChatHeaderProps {
   selectedTone: string;
   onBack: () => void;
+  isInformativeMode: boolean;
+  onToggleMode: () => void;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, isInformativeMode, onToggleMode }) => {
   const navigate = useNavigate();
 
   return (
@@ -62,6 +64,29 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack }) => {
             >
               <ArrowLeft className="h-4 w-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
               Back
+            </Button>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onToggleMode}
+              className={`group flex items-center space-x-2 transition-all duration-300 rounded-xl ${
+                isInformativeMode 
+                  ? 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 text-blue-700' 
+                  : 'bg-gradient-to-r from-green-50 to-green-100 border-green-200 text-green-700'
+              }`}
+            >
+              {isInformativeMode ? (
+                <>
+                  <FileText className="w-4 h-4" />
+                  <span>Informative Mode</span>
+                </>
+              ) : (
+                <>
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Casual Chat</span>
+                </>
+              )}
             </Button>
             
             <div className="flex items-center space-x-5 bg-gradient-to-r from-white/80 via-blue-50/50 to-green-50/50 backdrop-blur-md px-6 py-3 rounded-3xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
@@ -209,6 +234,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
   const [sessionId, setSessionId] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [isSessionInitialized, setIsSessionInitialized] = useState(false);
+  const [isInformativeMode, setIsInformativeMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Single initialization effect
@@ -633,6 +659,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
     }
   };
 
+  const handleToggleMode = () => {
+    setIsInformativeMode(prev => !prev);
+  };
+
   const generateLiamResponse = async (userMessage: string, tone: string): Promise<string> => {
     const API_URL = "https://cmhf-demo-1034025262875.us-central1.run.app/run_sse";
     
@@ -661,7 +691,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
           new_message: {
             role: "user",
             parts: [{
-              text: `[Response Style: ${tone}] [User Age Range: ${consentData?.ageRange || 'not specified'}] [Mode: ${consentData?.interactionMode || 'chat'}] User message: "${userMessage}"`
+              text: `[Response Style: ${tone}] [Mode: ${isInformativeMode ? 'informative' : 'casual chat'}] User message: "${userMessage}"`
             }]
           },
           streaming: true
@@ -769,7 +799,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
     <div className="flex flex-col h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-green-50/30">
       <ChatHeader 
         selectedTone={selectedTone} 
-        onBack={onBack} 
+        onBack={onBack}
+        isInformativeMode={isInformativeMode}
+        onToggleMode={handleToggleMode}
       />
 
       <div className="bg-gradient-to-r from-red-50 via-pink-50 to-red-50 border-b border-red-200/50 p-4 shadow-sm">
