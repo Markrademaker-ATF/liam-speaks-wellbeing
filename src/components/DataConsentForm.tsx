@@ -18,6 +18,8 @@ export interface ConsentData {
   contactMethod: 'email' | 'phone' | '';
   contactValue: string;
   preferredName: string;
+  ageRange: string;
+  interactionMode: string;
 }
 
 const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
@@ -27,6 +29,9 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
   const [contactMethod, setContactMethod] = useState<'email' | 'phone' | ''>('');
   const [contactValue, setContactValue] = useState('');
   const [preferredName, setPreferredName] = useState('');
+  const [ageRange, setAgeRange] = useState('');
+  const [interactionMode, setInteractionMode] = useState('');
+  const [consentGiven, setConsentGiven] = useState(false);
 
   const handleSubmit = () => {
     const consentData: ConsentData = {
@@ -34,7 +39,9 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
       allowProactiveContact,
       contactMethod,
       contactValue,
-      preferredName
+      preferredName,
+      ageRange,
+      interactionMode
     };
     onComplete(consentData);
   };
@@ -154,37 +161,90 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
                 </div>
               )}
             </div>
-          </div>
 
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <div className="flex items-start space-x-3">
-              <Heart className="w-5 h-5 text-red-500 mt-0.5" />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-800">Your Privacy Matters</p>
-                <p className="text-xs text-gray-600 mt-1">
-                  All data is encrypted, securely stored, and never shared with third parties. 
-                  You can change these preferences or delete your data at any time.
-                </p>
-                <Button
-                  variant="link"
-                  size="sm"
-                  className="text-xs text-blue-600 hover:text-blue-800 p-0 h-auto mt-2"
-                  onClick={() => navigate('/privacy')}
-                >
-                  Read our full Privacy Policy
-                  <ExternalLink className="w-3 h-3 ml-1" />
-                </Button>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <div className="flex items-start space-x-3">
+                <Heart className="w-5 h-5 text-red-500 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-800">Your Privacy Matters</p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    All data is encrypted, securely stored, and never shared with third parties. 
+                    You can change these preferences or delete your data at any time.
+                  </p>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-xs text-blue-600 hover:text-blue-800 p-0 h-auto mt-2"
+                    onClick={() => navigate('/privacy')}
+                  >
+                    Read our full Privacy Policy
+                    <ExternalLink className="w-3 h-3 ml-1" />
+                  </Button>
+                </div>
               </div>
+            </div>
+
+            <div className="flex space-y-4">
+              <div>
+                <Label htmlFor="ageRange" className="text-sm font-medium text-gray-700">
+                  Age Range
+                </Label>
+                <select
+                  id="ageRange"
+                  value={ageRange}
+                  onChange={(e) => setAgeRange(e.target.value)}
+                  className="mt-1"
+                >
+                  <option value="">Select Age Range</option>
+                  <option value="18-24">18-24</option>
+                  <option value="25-34">25-34</option>
+                  <option value="35-44">35-44</option>
+                  <option value="45-54">45-54</option>
+                  <option value="55-64">55-64</option>
+                  <option value="65+">65+</option>
+                </select>
+              </div>
+
+              <div>
+                <Label htmlFor="interactionMode" className="text-sm font-medium text-gray-700">
+                  Interaction Mode
+                </Label>
+                <select
+                  id="interactionMode"
+                  value={interactionMode}
+                  onChange={(e) => setInteractionMode(e.target.value)}
+                  className="mt-1"
+                >
+                  <option value="">Select Interaction Mode</option>
+                  <option value="chat">Chat</option>
+                  <option value="advice">Advice</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-start space-x-3">
+              <input
+                type="checkbox"
+                id="consent"
+                checked={consentGiven}
+                onChange={(e) => setConsentGiven(e.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <label htmlFor="consent" className="text-sm text-gray-700">
+                I understand that this is an AI companion and not a replacement for professional mental health support. 
+                I agree to use this service responsibly and seek professional help when needed.
+              </label>
             </div>
           </div>
 
           <div className="flex space-x-4 pt-4">
             <Button
-              onClick={handleSubmit}
+              type="submit"
+              disabled={!consentGiven}
               className="flex-1 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white"
             >
               <CheckCircle className="w-4 h-4 mr-2" />
-              Continue to Chat
+              Start Chatting
             </Button>
             <Button
               onClick={handleSkip}
