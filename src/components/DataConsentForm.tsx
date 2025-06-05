@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,8 +19,6 @@ export interface ConsentData {
   contactMethod: 'email' | 'phone' | '';
   contactValue: string;
   preferredName: string;
-  ageRange: string;
-  interactionMode: string;
 }
 
 const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
@@ -29,8 +28,6 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
   const [contactMethod, setContactMethod] = useState<'email' | 'phone' | ''>('');
   const [contactValue, setContactValue] = useState('');
   const [preferredName, setPreferredName] = useState('');
-  const [ageRange, setAgeRange] = useState('');
-  const [interactionMode, setInteractionMode] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
 
   const handleSubmit = () => {
@@ -39,9 +36,7 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
       allowProactiveContact,
       contactMethod,
       contactValue,
-      preferredName,
-      ageRange,
-      interactionMode
+      preferredName
     };
     onComplete(consentData);
   };
@@ -184,44 +179,6 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
               </div>
             </div>
 
-            <div className="flex space-y-4">
-              <div>
-                <Label htmlFor="ageRange" className="text-sm font-medium text-gray-700">
-                  Age Range
-                </Label>
-                <select
-                  id="ageRange"
-                  value={ageRange}
-                  onChange={(e) => setAgeRange(e.target.value)}
-                  className="mt-1"
-                >
-                  <option value="">Select Age Range</option>
-                  <option value="18-24">18-24</option>
-                  <option value="25-34">25-34</option>
-                  <option value="35-44">35-44</option>
-                  <option value="45-54">45-54</option>
-                  <option value="55-64">55-64</option>
-                  <option value="65+">65+</option>
-                </select>
-              </div>
-
-              <div>
-                <Label htmlFor="interactionMode" className="text-sm font-medium text-gray-700">
-                  Interaction Mode
-                </Label>
-                <select
-                  id="interactionMode"
-                  value={interactionMode}
-                  onChange={(e) => setInteractionMode(e.target.value)}
-                  className="mt-1"
-                >
-                  <option value="">Select Interaction Mode</option>
-                  <option value="chat">Chat</option>
-                  <option value="advice">Advice</option>
-                </select>
-              </div>
-            </div>
-
             <div className="flex items-start space-x-3">
               <input
                 type="checkbox"
@@ -242,6 +199,7 @@ const DataConsentForm: React.FC<DataConsentFormProps> = ({ onComplete }) => {
               type="submit"
               disabled={!consentGiven}
               className="flex-1 bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 text-white"
+              onClick={handleSubmit}
             >
               <CheckCircle className="w-4 h-4 mr-2" />
               Start Chatting
