@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,29 +67,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, isInforma
               Back
             </Button>
             
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onToggleMode}
-              className={`group flex items-center space-x-2 transition-all duration-300 rounded-xl ${
-                isInformativeMode 
-                  ? 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 text-blue-700' 
-                  : 'bg-gradient-to-r from-green-50 to-green-100 border-green-200 text-green-700'
-              }`}
-            >
-              {isInformativeMode ? (
-                <>
-                  <FileText className="w-4 h-4" />
-                  <span>Informative Mode</span>
-                </>
-              ) : (
-                <>
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Casual Chat</span>
-                </>
-              )}
-            </Button>
-            
             <div className="flex items-center space-x-5 bg-gradient-to-r from-white/80 via-blue-50/50 to-green-50/50 backdrop-blur-md px-6 py-3 rounded-3xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
               <div className="relative group">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-green-400 rounded-full opacity-30 group-hover:opacity-50 transition-opacity duration-300 animate-pulse"></div>
@@ -127,26 +105,51 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, isInforma
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <Button
-              variant="outline"
-              size="sm"
-              className="group flex items-center space-x-2 bg-gradient-to-r from-purple-50/80 to-indigo-50/80 backdrop-blur-sm border-purple-200/50 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100/90 hover:to-indigo-100/90 hover:border-purple-300/70 transition-all duration-300 font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-105"
-              onClick={() => navigate('/resource-plan')}
-            >
-              <FileText className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-              <span>Your Resource Plan</span>
-              <ExternalLink className="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-            </Button>
+          <div className="flex flex-col items-end space-y-3">
+            <div className="flex items-center space-x-4">
+              <Button
+                variant="outline"
+                size="sm"
+                className="group flex items-center space-x-2 bg-gradient-to-r from-purple-50/80 to-indigo-50/80 backdrop-blur-sm border-purple-200/50 text-purple-700 hover:bg-gradient-to-r hover:from-purple-100/90 hover:to-indigo-100/90 hover:border-purple-300/70 transition-all duration-300 font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-105"
+                onClick={() => navigate('/resource-plan')}
+              >
+                <FileText className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                <span>Your Resource Plan</span>
+                <ExternalLink className="w-3 h-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                className="group flex items-center space-x-2 bg-gradient-to-r from-gray-50/80 to-slate-50/80 backdrop-blur-sm border-gray-200/50 text-gray-700 hover:bg-gradient-to-r hover:from-gray-100/90 hover:to-slate-100/90 hover:border-gray-300/70 transition-all duration-300 font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-105"
+                onClick={() => navigate('/privacy')}
+              >
+                <Shield className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
+                <span>Privacy</span>
+              </Button>
+            </div>
             
             <Button
               variant="outline"
               size="sm"
-              className="group flex items-center space-x-2 bg-gradient-to-r from-gray-50/80 to-slate-50/80 backdrop-blur-sm border-gray-200/50 text-gray-700 hover:bg-gradient-to-r hover:from-gray-100/90 hover:to-slate-100/90 hover:border-gray-300/70 transition-all duration-300 font-semibold rounded-xl shadow-md hover:shadow-lg hover:scale-105"
-              onClick={() => navigate('/privacy')}
+              onClick={onToggleMode}
+              className={`group flex items-center space-x-2 transition-all duration-300 rounded-xl ${
+                isInformativeMode 
+                  ? 'bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 text-blue-700' 
+                  : 'bg-gradient-to-r from-green-50 to-green-100 border-green-200 text-green-700'
+              }`}
             >
-              <Shield className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" />
-              <span>Privacy</span>
+              {isInformativeMode ? (
+                <>
+                  <FileText className="w-4 h-4" />
+                  <span>Informative Mode</span>
+                </>
+              ) : (
+                <>
+                  <MessageCircle className="w-4 h-4" />
+                  <span>Casual Chat</span>
+                </>
+              )}
             </Button>
           </div>
         </div>
