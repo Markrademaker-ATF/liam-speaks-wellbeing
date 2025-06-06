@@ -142,7 +142,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ selectedTone, onBack, isInforma
               {isInformativeMode ? (
                 <>
                   <FileText className="w-4 h-4" />
-                  <span>Informative Mode</span>
+                  <span>Informative</span>
                 </>
               ) : (
                 <>
