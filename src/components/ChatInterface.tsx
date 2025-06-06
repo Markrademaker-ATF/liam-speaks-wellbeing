@@ -694,7 +694,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
           new_message: {
             role: "user",
             parts: [{
-              text: `[Response Style: ${tone}] [Mode: ${isInformativeMode ? 'informative' : 'casual chat'}] User message: "${userMessage}"`
+              text: isInformativeMode 
+                ? `[Response Style: ${tone}] [Mode: informative] Provide a detailed, structured response with evidence-based information to: "${userMessage}"`
+                : `[Response Style: ${tone}] [Mode: casual chat] Have a friendly, conversational response to: "${userMessage}"`
             }]
           },
           streaming: true
