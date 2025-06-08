@@ -715,7 +715,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
       const responseLines = apiResponseText.split('\n').filter(line => line.trim() !== '');
       
       // Get the last non-empty line which should contain the complete response
-      const lastLine = responseLines[responseLines.length - 1];
+      const lastLine = responseLines[responseLines.length - 1].replace(/\*\*/g, '');
       
       // Remove 'data: ' prefix if present
       const jsonString = lastLine.startsWith('data: ') ? lastLine.slice(6) : lastLine;
