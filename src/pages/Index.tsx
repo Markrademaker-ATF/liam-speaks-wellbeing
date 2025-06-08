@@ -4,19 +4,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import { MessageCircle, Heart, Shield, Users, Phone, Mail, ChevronDown, Sparkles, Brain, Zap, Star } from 'lucide-react';
 import ChatInterface from '@/components/ChatInterface';
-import ToneSelector from '@/components/ToneSelector';
 import ResourceCard from '@/components/ResourceCard';
 
 const Index = () => {
   const [showChat, setShowChat] = useState(false);
-  const [selectedTone, setSelectedTone] = useState('supportive');
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
-  const [userAge, setUserAge] = useState('');
-  const [chatReason, setChatReason] = useState('');
 
   const resources = [
     {
@@ -72,58 +66,11 @@ const Index = () => {
     }
   ];
 
-  const suggestToneBasedOnInputs = (age: string, reason: string) => {
-    // Age-based suggestions
-    if (age === 'under-18') {
-      return 'youthful'; // Always use youthful for under 18
-    } else if (age === '18-25') {
-      if (reason === 'anxiety' || reason === 'stress') return 'youthful';
-      if (reason === 'depression') return 'supportive';
-      return 'casual';
-    } else if (age === '26-35') {
-      if (reason === 'work-stress' || reason === 'relationship') return 'professional';
-      if (reason === 'anxiety') return 'supportive';
-      return 'casual';
-    } else if (age === '36-50') {
-      if (reason === 'work-stress') return 'professional';
-      if (reason === 'depression' || reason === 'isolation') return 'supportive';
-      return 'mature';
-    } else if (age === '50+') {
-      if (reason === 'depression' || reason === 'health-concerns') return 'mature';
-      if (reason === 'anxiety') return 'supportive';
-      return 'mature';
-    }
-    
-    // Reason-based fallback
-    if (reason === 'crisis') return 'supportive';
-    if (reason === 'work-stress') return 'professional';
-    if (reason === 'anxiety' || reason === 'depression') return 'supportive';
-    
-    return 'supportive'; // default
-  };
-
-  const handleInputChange = (field: string, value: string) => {
-    if (field === 'age') {
-      setUserAge(value);
-    } else if (field === 'reason') {
-      setChatReason(value);
-    }
-    
-    // Auto-suggest tone when both fields are filled
-    const currentAge = field === 'age' ? value : userAge;
-    const currentReason = field === 'reason' ? value : chatReason;
-    
-    if (currentAge && currentReason) {
-      const suggestedTone = suggestToneBasedOnInputs(currentAge, currentReason);
-      setSelectedTone(suggestedTone);
-    }
-  };
-
   if (showChat) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
         <ChatInterface 
-          selectedTone={selectedTone}
+          selectedTone="supportive"
           onBack={() => setShowChat(false)}
         />
       </div>
@@ -358,83 +305,15 @@ const Index = () => {
                 })}
               </div>
               
-              {/* User Information and Style Selection */}
-              <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl p-8">
-                <div className="space-y-6">
-                  <div className="text-center mb-6">
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">Personalize Your Experience</h3>
-                    <p className="text-gray-600">Help us tailor Liam's communication style to best support you</p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="age-select" className="text-sm font-medium text-gray-700">
-                        What's your age range?
-                      </Label>
-                      <Select value={userAge} onValueChange={(value) => handleInputChange('age', value)}>
-                        <SelectTrigger id="age-select" className="bg-white border-gray-300">
-                          <SelectValue placeholder="Select your age range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="under-18">Younger than 18</SelectItem>
-                          <SelectItem value="18-25">18-25 years old</SelectItem>
-                          <SelectItem value="26-35">26-35 years old</SelectItem>
-                          <SelectItem value="36-50">36-50 years old</SelectItem>
-                          <SelectItem value="50+">50+ years old</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="reason-select" className="text-sm font-medium text-gray-700">
-                        What brings you here today?
-                      </Label>
-                      <Select value={chatReason} onValueChange={(value) => handleInputChange('reason', value)}>
-                        <SelectTrigger id="reason-select" className="bg-white border-gray-300">
-                          <SelectValue placeholder="Select your main concern" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="general" className="bg-blue-50 border-b-2 border-blue-200">
-                            <div className="flex flex-col py-1">
-                              <span className="font-semibold text-blue-900">Just want to talk</span>
-                              <span className="text-xs text-blue-600">Open conversation</span>
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="stress">General stress or overwhelm</SelectItem>
-                          <SelectItem value="anxiety">Anxiety or worry</SelectItem>
-                          <SelectItem value="depression">Feeling down or depressed</SelectItem>
-                          <SelectItem value="work-stress">Work-related stress</SelectItem>
-                          <SelectItem value="relationship">Relationship concerns</SelectItem>
-                          <SelectItem value="isolation">Feeling isolated or lonely</SelectItem>
-                          <SelectItem value="health-concerns">Health-related anxiety</SelectItem>
-                          <SelectItem value="crisis">Crisis or urgent support needed</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {userAge && chatReason && (
-                    <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-200">
-                      <div className="flex items-center space-x-2 mb-3">
-                        <Sparkles className="w-4 h-4 text-blue-600" />
-                        <span className="text-sm font-medium text-blue-900">Recommended Communication Style</span>
-                      </div>
-                      <ToneSelector selectedTone={selectedTone} onToneChange={setSelectedTone} />
-                    </div>
-                  )}
-                </div>
-              </div>
-              
               {/* CTA Button */}
               <div className="text-center">
                 <Button 
                   onClick={() => setShowChat(true)}
-                  disabled={!userAge || !chatReason}
                   size="lg" 
-                  className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 hover:from-blue-700 hover:via-purple-700 hover:to-green-700 text-white font-bold py-4 px-12 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl text-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="bg-gradient-to-r from-blue-600 via-purple-600 to-green-600 hover:from-blue-700 hover:via-purple-700 hover:to-green-700 text-white font-bold py-4 px-12 rounded-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl text-lg"
                 >
                   <MessageCircle className="w-5 h-5 mr-3" />
-                  {userAge && chatReason ? 'Start Your Journey with Liam' : 'Complete the form to continue'}
+                  Start Your Journey with Liam
                 </Button>
                 <p className="text-sm text-gray-500 mt-3">
                   Free, confidential, and available 24/7
