@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -667,84 +666,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedTone, onBack }) =
   };
 
   const generateLiamResponse = async (userMessage: string, tone: string): Promise<string> => {
-    const API_URL = "https://cmhf-demo-1034025262875.us-central1.run.app/run_sse";
-    
-    // Check if session is initialized
-    if (!isSessionInitialized || !sessionId || !userId) {
-      console.error('Session not initialized:', { isSessionInitialized, sessionId, userId });
-      return "I'm sorry, there was an issue with the chat session. Please try refreshing the page.";
-    }
-
+    // Check for crisis keywords first
     const isCrisis = detectCrisisKeywords(userMessage);
 
     if (isCrisis) {
       return "I'm really concerned about what you're sharing with me. Your safety is the most important thing right now. Please consider reaching out to a crisis counselor immediately at 1-833-456-4566. They're available 24/7 and can provide immediate support. You don't have to go through this alone - there are people who want to help you right now.";
     }
 
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          app_name: "cmhf_ai_demo",
-          user_id: userId,
-          session_id: sessionId,
-          new_message: {
-            role: "user",
-            parts: [{
-              text: isInformativeMode 
-                ? `[Response Style: ${tone}] [Mode: informative] Provide a detailed, structured response with evidence-based information to: "${userMessage}"`
-                : `[Response Style: ${tone}] [Mode: casual chat] Chat with the user, only give information if it is asked. Have a friendly, short, conversational and concise response to: "${userMessage}"`
-            }]
-          },
-          streaming: true
-        }),
-      });
-
-      if (!response.ok) {
-        const errorBody = await response.text();
-        console.error('API error:', response.status, response.statusText, errorBody);
-        return "I'm sorry, I'm having trouble connecting right now. Please try again in a moment, or consider reaching out to a professional directly.";
-      }
-      const apiResponseText = await response.text();
-      console.log('API response:', apiResponseText);
-
-      // Split the response by newlines and filter out empty lines
-      const responseLines = apiResponseText.split('\n').filter(line => line.trim() !== '');
-      
-      // Get the last non-empty line which should contain the complete response
-      const lastLine = responseLines[responseLines.length - 1].replace(/\*\*/g, '');
-      
-      // Remove 'data: ' prefix if present
-      const jsonString = lastLine.startsWith('data: ') ? lastLine.slice(6) : lastLine;
-      
-      try {
-        const data = JSON.parse(jsonString);
-        
-        // Handle the case where the response contains an error
-        if (data.error) {
-          console.error('API response error:', data.error);
-          return "I'm sorry, there was an issue processing your request. Please try again.";
-        }
-
-        // Extract the response text from the content parts
-        const responseText = data?.content?.parts?.[0]?.text || 
-                            data?.response?.text || 
-                            "I'm sorry, I couldn't generate a response at this time. Please try again.";
-
-        // Convert **text** to bold
-        const formattedResponse = responseText;
-        return formattedResponse;
-      } catch (error) {
-        console.error('Error parsing API response:', error);
-        return "I'm sorry, something went wrong while processing the response. Please try again later.";
-      }
-    } catch (error) {
-      console.error('Error calling API:', error);
-      return "I'm sorry, something went wrong while trying to generate a response. Please try again later.";
-    }
+    // Return message about needing Gemini API key
+    return "I'm currently not able to respond as I need to be connected to Google's Gemini AI through an API key in the backend. Please ensure that the Gemini API key is properly configured in the system to enable our conversation. Once connected, I'll be able to provide you with personalized mental health support and guidance.";
   };
 
   // Function to handle sending a message in the chat interface
